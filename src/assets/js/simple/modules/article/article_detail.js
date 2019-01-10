@@ -8,6 +8,7 @@ import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 import VueShowdown from 'vue-showdown'
 import hljs from 'highlight.js'
+/* eslint-disable */
 import jquerysession from '@/assets/js/simple/jquerysession'
 import { zoom } from '@/assets/js/other/pinchzoom'
 import '@/assets/js/simple/note'
@@ -18,7 +19,7 @@ Vue.use(VueShowdown, {
     emoji: false
   }
 })
-var detail
+var current
 export default {
   name: 'articleDetail',
   template: '<ArticleDetail/>',
@@ -32,9 +33,9 @@ export default {
     }
   },
   mounted: function () {
-    detail = this
-    detail.getArticleDetail()
-    detail.onCompleted()
+    current = this
+    current.getArticleDetail()
+    current.onCompleted()
   },
   methods: {
     getArticleDetail: function () {
@@ -66,9 +67,9 @@ export default {
             window.location.href = '/common/404'
             return false
           }
-          detail.item = ar
-          detail.$nextTick(function () {
-            detail.pinch()
+          current.item = ar
+          current.$nextTick(function () {
+            current.pinch()
           })
           return true
         })
@@ -77,7 +78,7 @@ export default {
           console.log(error)
         })
     },
-    getComments: function () {
+    getNewComments: function () {
       var _token = ''
       var _userId = ''
       $(function () {
@@ -104,8 +105,8 @@ export default {
           if (checkNull(cos)) {
             return false
           }
-          detail.commentsItems = cos
-          //detail.$forceUpdate()
+          current.commentsItems = cos
+          //current.$forceUpdate()
           return true
         })
         .catch(error => {
@@ -145,12 +146,72 @@ export default {
         })
       })
     },
+    //
     getAllComments: function () {
       var _articleId = this.$route.params.articleId
       this.$router.push({ path: '/article/' + _articleId + '/comments' })
     },
+    //
+    doComment: function () {
+      var _token = ''
+      var _userId = ''
+      $(function () {
+        var _userInfo = $.parseJSON($.session.get('user'))
+        if (!checkNull(_userInfo)) {
+          _token = _userInfo.token
+          _userId = _userInfo.userId
+        }
+      })
+      var _text = $('textarea[name=co_tt]').val()
+      if (checkNull(_text)) {
+        this.$toast.bottom('评论不能为空')
+        return false
+      }
+      if (_text.length > 100) {
+        this.$toast.bottom('评论过长')
+        return false
+      }
+      $('.co_btn').attr('disabled', 'disabled')
+      var _articleId = this.$route.params.articleId
+
+      Vue.axios({
+        method: 'post',
+        url: '/api/v1/article/' + _articleId + '/comment',
+        headers: {
+          token: _token,
+          userId: _userId
+        },
+        data: {
+          content: _text
+        }
+      }).then(response => {
+        var obj = response.data
+        if (obj.code === 20001) {
+          this.$toast.bottom('请先登录')
+          $.session.remove('user')
+          $('.co_btn').removeAttr('disabled')
+          return false
+        }
+        if (obj.code === 0) {
+          this.$toast.bottom('评论成功')
+          $('.co_tt').val('')
+          if (current.commentsItems == null) {
+            current.commentsItems = []
+          }
+          current.commentsItems.unshift(obj.data)
+        } else if (obj.code === 20001) {
+          this.$toast.bottom('请先登录')
+          $.session.remove('user')
+        }
+        $('.co_btn').removeAttr('disabled')
+        return true
+      }).catch(error => {
+        $('.co_btn').removeAttr('disabled')
+        console.log(error)
+      })
+    },
     onCompleted: function () {
-      detail.getComments()
+      current.getNewComments()
     }
   }
 }

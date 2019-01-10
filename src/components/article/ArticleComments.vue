@@ -1,12 +1,28 @@
 <template>
   <div class="main" style="margin-top: 45px;">
     <div class="co_comment">
+      <div
+        class="loading"
+        style="display: none; font-size: 13px; text-align: center; color: rgb(144, 145, 144);"
+      >
+        <label>加载中</label>
+        <img
+          height="15px"
+          withHead="0"
+          style="top: 3px; position: relative;"
+          width="15px"
+          src="../../assets/img/loading.gif"
+        >
+      </div>
       <div class="co_num">
         <span>全部评论</span>
         <span id="co_comment_num">({{count}})</span>
       </div>
       <div class="co_list">
-        <div v-if="items != null" v-for="item in items" :key="item.commentId">
+        <div v-if="items != null" v-for="(item,index) in items" :key="item.commentId">
+          <div v-if="index%6 == 0 " style="text-align: center; font-size: 12px; color: #DDDDDD;">
+            <label v-html="item.createDate"/>
+          </div>
           <div class="left_comment" v-if="item.authorId != item.replyerId">
             <div class="photo">
               <img class="circle" :src="headForImg + item.replyerAvatar">
@@ -36,19 +52,6 @@
       <div class="part_comment" id="part_comment">
         <textarea class="co_tt" placeholder="说说你的见解呗" rows="1" maxlength="50" name="co_tt"></textarea>
         <input class="co_btn" type="button" value="评论" @click="doComment()">
-      </div>
-      <div
-        class="loading"
-        style="visibility: hidden; font-size: 13px; text-align: center; color: rgb(144, 145, 144);"
-      >
-        <label>加载中</label>
-        <img
-          height="15px"
-          withHead="0"
-          style="top: 3px; position: relative;"
-          width="15px"
-          src="../../assets/img/loading.gif"
-        >
       </div>
     </div>
   </div>

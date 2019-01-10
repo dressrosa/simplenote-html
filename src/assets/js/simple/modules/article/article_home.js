@@ -5,10 +5,18 @@ import router from '@/router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import $ from 'jquery'
-import { checkNull, showTip } from '@/assets/js/simple/common'
+import { checkNull } from '@/assets/js/simple/common'
 import '@/assets/js/simple/note'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
 import jquerysession from '@/assets/js/simple/jquerysession'
+import 'vue2-toast/lib/toast.css'
+import Toast from 'vue2-toast'
+Vue.use(Toast, {
+  type: 'bottom',
+  duration: 1000,
+  wordWrap: true,
+  width: '130px'
+})
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 var home
@@ -94,7 +102,7 @@ export default {
     heartClick: function (event) {
       var _userInfo = $.parseJSON($.session.get('user'))
       if (checkNull(_userInfo)) {
-        showTip('您未登录或登录失效,请重新登录')
+        this.$toast.bottom('请先登录')
         $.session.remove('user')
         return false
       }
@@ -137,7 +145,7 @@ export default {
       }).then(response => {
         var obj = response.data
         if (obj.code === '20001') {
-          showTip('您未登录或登录失效,请重新登录')
+          this.$toast.bottom('请先登录')
           $.session.remove('user')
           return false
         }

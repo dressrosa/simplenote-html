@@ -25,7 +25,7 @@
             <label class="addon icon-eye" @click="showPwd($event)"></label>
           </div>
           <ul class="list-group">
-            <input type="button" value="登录" class="xbtn logining">
+            <input type="button" value="登录" class="xbtn logining" @click="doLogin()">
             <div class="change_a">
               <a class="change goregister">注册</a>
             </div>
@@ -91,7 +91,7 @@
   </div>
 </template>
 
- <!-- <script src="@/assets/js/simple/modules/common/login.js"></script> -->
+<script src="@/assets/js/simple/modules/user/login.js"></script>
 <style >
 @import "../../assets/css/simple_mobile.css";
 body {

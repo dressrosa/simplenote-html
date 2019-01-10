@@ -119,7 +119,7 @@
     </div>
     <div class="part_comment">
       <textarea class="co_tt" placeholder="说说你的见解呗" rows="1" maxlength="50" name="co_tt"></textarea>
-      <input class="co_btn" type="button" value="评论">
+      <input class="co_btn" type="button" value="评论" @click="doComment()">
     </div>
   </div>
 </template>

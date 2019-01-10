@@ -5,7 +5,6 @@ import VueAxios from 'vue-axios'
 import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 import '@/assets/js/simple/note'
-import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
 // eslint-disable-next-line
 import jquerysession from '@/assets/js/simple/jquerysession'
 import 'vue2-toast/lib/toast.css'
@@ -21,6 +20,7 @@ Vue.use(VueAxios, axios)
 var current
 var _lock = true
 var _pageNum = 1
+var _pageSize = 10
 export default {
   name: 'comment',
   template: '<Comments/>',
@@ -38,11 +38,11 @@ export default {
     current = this
   },
   destroyed: function () {
-    $(window).unbind('scroll')
   },
   mounted: function () {
     // 监听
     _pageNum = 1
+    current.getComments(_pageNum, _pageSize)
     current.onCompleted()
   },
   methods: {
@@ -78,13 +78,12 @@ export default {
             return false
           }
           if (current.items == null) {
-            current.items = _ret
-            current.count = response.data.count
-          } else {
-            _ret.forEach(v => {
-              current.items.push(v)
-            })
+            current.items = []
           }
+          current.count = response.data.count
+          _ret.forEach(v => {
+            current.items.unshift(v)
+          })
           _lock = false
         })
         .catch(error => {
@@ -141,7 +140,11 @@ export default {
         if (obj.code === 0) {
           this.$toast.bottom('评论成功')
           $('.co_tt').val('')
-          $('.co_list').prepend('<label>HHHHHHH</label>')
+          current.count = current.count + 1
+          if (current.items == null) {
+            current.items = []
+          }
+          current.items.push(obj.data)
         } else if (obj.code === 20001) {
           this.$toast.bottom('请先登录')
           $.session.remove('user')
@@ -154,23 +157,46 @@ export default {
       })
     },
     //
+    doLoad: function () {
+      var _top = document.documentElement.scrollTop
+      console.log('top:' + _top)
+      if (_top === 0) {
+        if (!_lock) {
+          _lock = true
+          $('.loading').css('display', 'block')
+          setTimeout(function () {
+            current.getComments(++_pageNum, _pageSize)
+            console.log('pageNum:' + _pageNum)
+            $('.loading').css('display', 'none')
+          }, 50)
+        }
+      }
+    },
+    //
     onCompleted: function () {
-      $(function () {
-        var _pageSize = 10
-        current.getComments(_pageNum, _pageSize)
-        $(window).scroll(function () {
-          if (getScrollTop() + getClientHeight() === getScrollHeight()) {
-            if (!_lock) {
-              _lock = true
-              $('.loading').css('visibility', 'visible')
-              setTimeout(function () {
-                current.getComments(++_pageNum, _pageSize)
-                $('.loading').css('visibility', 'hidden')
-              }, 50)
-            }
-          }
-        })
-      })
+      var outerScroller = document.querySelector('body')
+      var touchStart = 0
+      var touchDis = 0
+      outerScroller.addEventListener('touchstart', function (event) {
+        var touch = event.targetTouches[0]
+        // 把元素放在手指所在的位置
+        touchStart = touch.pageY
+        //  console.log('开始:' + touchStart)
+      }, false)
+      outerScroller.addEventListener('touchmove', function (event) {
+        var touch = event.targetTouches[0]
+        // console.log('结束' + touch.pageY)
+        touchDis = touch.pageY - touchStart
+      }, false)
+      outerScroller.addEventListener('touchend', function (event) {
+        touchStart = 0
+        var _top = document.documentElement.scrollTop
+        // console.log('滑动距离' + touchDis)
+        if (touchDis > 70 && _top === 0) {
+          //   console.log('刷新了啊')
+          current.doLoad()
+        }
+      }, false)
     }
   }
 }

@@ -1,16 +1,16 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import router from '@/router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 import '@/assets/js/simple/note'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
+// eslint-disable-next-line
 import jquerysession from '@/assets/js/simple/jquerysession'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header'
 Vue.use(Toast, {
   type: 'bottom',
   duration: 1000,
@@ -19,44 +19,60 @@ Vue.use(Toast, {
 })
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
-var home
+var current
 var _lock = true
 var _pageNum = 1
+var _pageSize = 10
 export default {
-  name: 'home',
+  name: 'Home',
   template: '<Home/>',
-  router,
+  components: {
+    common_header_view: Header,
+    common_footer_view: Footer
+  },
+  // eslint-disable-next-line
   data() {
     return {
       /* eslint-disable */
       headForImg: imgHead,
-      items: null
+      items: null,
+      isLogin: false
     }
   },
+  beforeRouteEnter: function (to, from, next) {
+    next(vm => {
+      var _scrollTop = $.session.get(vm.$router.name)
+      document.body.scrollTop = _scrollTop
+    })
+  },
+  beforeRouteLeave: function (to, from, next) {
+    var _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    $.session.set(this.$route.name, _scrollTop, true)
+    to.meta.returnback = false
+    next()
+  },
   created: function () {
-    home = this
+    current = this
     $('.header').addClass('transparent_header')
+    current.getHotList(1, _pageSize)
   },
   destroyed: function () {
-    $(window).unbind('scroll');
+    $(window).unbind('scroll')
     $('.header').removeClass('transparent_header')
   },
   mounted: function () {
-    // 监听
-    _pageNum = 1
-    home.onCompleted()
+    current.onCompleted()
   },
   methods: {
     getHotList: function (_pageNum, _pageSize) {
       var _token = ''
       var _userId = ''
-      $(function () {
-        var _userInfo = $.parseJSON($.session.get('user'))
-        if (!checkNull(_userInfo)) {
-          _token = _userInfo.token
-          _userId = _userInfo.userId
-        }
-      })
+      var _userInfo = $.parseJSON($.session.get('user'))
+      if (!checkNull(_userInfo)) {
+        current.isLogin = true
+        _token = _userInfo.token
+        _userId = _userInfo.userId
+      }
       Vue.axios.get('/api/v1/home', {
         headers: {
           pageNum: _pageNum,
@@ -76,14 +92,14 @@ export default {
             return false
           }
           var _ret = response.data.data
-          if (home.items == null) {
-            home.items = _ret
+          if (current.items == null) {
+            current.items = _ret
           } else {
             _ret.forEach(v => {
-              home.items.push(v)
+              current.items.push(v)
             });
           }
-          //  home.$forceUpdate()
+          //  current.$forceUpdate()
           _lock = false
         })
         .catch(error => {
@@ -124,13 +140,11 @@ export default {
       }
       var _token = ''
       var _userId = ''
-      $(function () {
-        var _userInfo = $.parseJSON($.session.get('user'))
-        if (!checkNull(_userInfo)) {
-          _token = _userInfo.token
-          _userId = _userInfo.userId
-        }
-      })
+      var _userInfo = $.parseJSON($.session.get('user'))
+      if (!checkNull(_userInfo)) {
+        _token = _userInfo.token
+        _userId = _userInfo.userId
+      }
       Vue.axios({
         method: 'post',
         url: '/api/v1/article/collect',
@@ -177,13 +191,11 @@ export default {
       }
       var _token = ''
       var _userId = ''
-      $(function () {
-        var _userInfo = $.parseJSON($.session.get('user'))
-        if (!checkNull(_userInfo)) {
-          _token = _userInfo.token
-          _userId = _userInfo.userId
-        }
-      })
+      var _userInfo = $.parseJSON($.session.get('user'))
+      if (!checkNull(_userInfo)) {
+        _token = _userInfo.token
+        _userId = _userInfo.userId
+      }
       Vue.axios.post('/api/v1/article/like', {
         headers: {
           token: _token,
@@ -206,29 +218,25 @@ export default {
     },
     onCompleted: function () {
       $(function () {
-        var _pageSize = 10
-        home.getHotList(_pageNum, _pageSize)
         $(window).scroll(function () {
           var _top = document.documentElement.scrollTop
           if (_top > 300) {
             $('.top_n1_info').css('opacity', 1)
-            $('.header').find('.search_span1').css('display', 'flex')
-            $('.header').find('.user_dropdown').css('background', '#d64444')
+            $('.header').find('.header_search').css('display', 'flex')
             $('.header').removeClass('transparent_header')
-            $('.top_n1').find('.search_span').css('display', 'none')
+            $('.top_n1').find('.header_user').css('display', 'none')
           } else {
             $('.top_n1_info').css('opacity', 1 - _top / 300.0)
-            $('.header').find('.search_span1').css('display', 'none')
-            $('.top_n1').find('.search_span').css('display', 'table')
+            $('.header').find('.header_search').css('display', 'none')
+            $('.top_n1').find('.header_user').css('display', 'table')
             $('.header').addClass('transparent_header')
-            $('.header').find('.user_dropdown').css('background', 'rgba(214, 68, 68, 0)')
           }
           if (getScrollTop() + getClientHeight() === getScrollHeight()) {
             if (!_lock) {
               _lock = true
               $('.loading').css('visibility', 'visible')
               setTimeout(function () {
-                home.getHotList(++_pageNum, _pageSize)
+                current.getHotList(++_pageNum, _pageSize)
                 $('.loading').css('visibility', 'hidden')
               }, 50)
             }
@@ -236,6 +244,5 @@ export default {
         })
       })
     }
-
   }
 }

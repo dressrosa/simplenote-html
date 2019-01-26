@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import router from '@/router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import $ from 'jquery'
@@ -9,6 +8,7 @@ import '@/assets/js/simple/note'
 import jquerysession from '@/assets/js/simple/jquerysession'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
+import Header from '@/components/Header'
 Vue.use(Toast, {
   type: 'bottom',
   duration: 1000,
@@ -20,11 +20,13 @@ Vue.use(VueAxios, axios)
 var current
 var _lock = true
 var _pageNum = 1
-var _pageSize = 10
+var _pageSize = 30
 export default {
-  name: 'comment',
-  template: '<Comments/>',
-  router,
+  name: 'ArticleComments',
+  template: '<ArticleComments/>',
+  components: {
+    common_header_view: Header
+  },
   // eslint-disable-next-line
   data() {
     return {
@@ -34,15 +36,36 @@ export default {
       count: 0
     }
   },
+  beforeRouteEnter: function (to, from, next) {
+    next(vm => {
+      if (vm.$route.meta.returnback) {
+        var _scrollTop = $.session.get(vm.$router.name)
+        document.body.scrollTop = _scrollTop
+      } else {
+        // document.body.scrollTop = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)
+      }
+    })
+  },
+  beforeRouteLeave: function (to, from, next) {
+    var _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    $.session.set(this.$route.name, _scrollTop, true)
+    to.meta.returnback = false
+    next()
+  },
+  activated: function () {
+    if (!this.$route.meta.returnback) {
+      _pageNum = 1
+      current.items = null
+      current.getComments(1, _pageSize)
+    }
+  },
   created: function () {
     current = this
+    // current.getComments(1, _pageSize)
   },
   destroyed: function () {
   },
   mounted: function () {
-    // 监听
-    _pageNum = 1
-    current.getComments(_pageNum, _pageSize)
     current.onCompleted()
   },
   methods: {
@@ -50,13 +73,11 @@ export default {
     getComments: function (_pageNum, _pageSize) {
       var _token = ''
       var _userId = ''
-      $(function () {
-        var _userInfo = $.parseJSON($.session.get('user'))
-        if (!checkNull(_userInfo)) {
-          _token = _userInfo.token
-          _userId = _userInfo.userId
-        }
-      })
+      var _userInfo = $.parseJSON($.session.get('user'))
+      if (!checkNull(_userInfo)) {
+        _token = _userInfo.token
+        _userId = _userInfo.userId
+      }
       var _articleId = this.$route.params.articleId
       Vue.axios.get('/api/v1/article/' + _articleId + '/comments', {
         headers: {
@@ -100,13 +121,11 @@ export default {
     doComment: function () {
       var _token = ''
       var _userId = ''
-      $(function () {
-        var _userInfo = $.parseJSON($.session.get('user'))
-        if (!checkNull(_userInfo)) {
-          _token = _userInfo.token
-          _userId = _userInfo.userId
-        }
-      })
+      var _userInfo = $.parseJSON($.session.get('user'))
+      if (!checkNull(_userInfo)) {
+        _token = _userInfo.token
+        _userId = _userInfo.userId
+      }
       var _text = $('textarea[name=co_tt]').val()
       if (checkNull(_text)) {
         this.$toast.bottom('评论不能为空')

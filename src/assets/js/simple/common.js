@@ -2,21 +2,6 @@
 var confirmjBox;
 $(function () {
     getDevice();
-    var userInfo = $.parseJSON($.session.get('user'));
-    if (checkNull(userInfo)) {
-        $("#loginSpan").css("display", "block");
-    } else {
-        $("#userSpan").css("display", "block");
-        $("#userSpan").on("mouseover", function () {
-            $(this).find("ul").css("display", "block");
-        });
-        $("#userSpan").on("mouseout", function () {
-            $(this).find("ul").css("display", "none");
-        });
-
-        $("#userSpan").find("#nickname").attr("href", "/user/" + userInfo.userId);
-        $("#userSpan").find("#nickname").text(userInfo.nickname);
-    }
 })
 
 export function setTitle(item) {
@@ -251,7 +236,7 @@ export function isPC() {
     return flag;
 }
 export function checkNull(item) {
-    if (item == null || item == undefined || item == 'undefined' || item == "") {
+    if (item == null || item == undefined || item == 'undefined' || item == "" || item == "null") {
         return true;
     }
     return false;

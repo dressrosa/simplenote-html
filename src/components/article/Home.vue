@@ -1,5 +1,6 @@
 <template>
   <div>
+    <common_header_view/>
     <div class="top">
       <div class="top_n1">
         <div
@@ -13,7 +14,7 @@
               <input class="search_module_input" placeholder="搜索文章">
             </div>
             <div class="search_icon">
-              <i class="icon_search search" href="/home"></i>
+              <i class="fa fa-search search" href="/home"></i>
             </div>
           </div>
         </div>
@@ -41,21 +42,21 @@
               </div>
               <div class="item_ar" :id="ar.articleId" @click="itemClick($event)">
                 <dt class="item_ar_title" v-html="ar.title"></dt>
-                <p class="item_ar_content" v-html="ar.content"></p>
+                <p class="item_ar_content" v-html="ar.content+'...'"></p>
               </div>
               <div class="comment_bar">
                 <div class="bar_part">
                   <i
                     v-if="ar.isLike =='1'"
-                    class="icon_like"
-                    style="color:#fd4d4d;"
+                    class="fa fa-thumbs-up"
+                    style="color:#ED6D54;"
                     data-like="1"
                     @click="likeClick($event)"
                     :article-id="ar.articleId"
                   ></i>
                   <i
                     v-else
-                    class="icon_like"
+                    class="fa fa-thumbs-o-up"
                     data-like="0"
                     @click="likeClick($event)"
                     :article-id="ar.articleId"
@@ -64,7 +65,7 @@
                 </div>
                 <div class="bar_part">
                   <i
-                    class="icon_comment_alt"
+                    class="fa fa-comment-o"
                     @click="commentClick($event)"
                     :article-id="ar.articleId"
                   ></i>
@@ -73,15 +74,15 @@
                 <div class="bar_part">
                   <i
                     v-if="ar.isCollect == '1'"
-                    class="icon_heart_alt"
+                    class="fa fa-heart"
                     @click="heartClick($event)"
-                    style="color:#fd4d4d;"
+                    style="color:#ED6D54;"
                     data-heart="1"
                     :article-id="ar.articleId"
                   ></i>
                   <i
                     v-else
-                    class="icon_heart_alt"
+                    class="fa fa-heart-o"
                     @click="heartClick"
                     data-heart="0"
                     :article-id="ar.articleId"
@@ -93,9 +94,9 @@
           </dl>
         </div>
       </div>
-      <div class="login_tip">
-        <a class="login_a" onclick="javascript:gotoLogin('/home')" id="login">登录/注册</a>
-      </div>
+      <!-- <div class="login_tip" v-if="!isLogin">
+        <a class="login_a" href="/login" id="login">登录/注册</a>
+      </div>-->
       <div
         class="loading"
         style="visibility: hidden; font-size: 13px; text-align: center; color: rgb(144, 145, 144);"
@@ -132,10 +133,11 @@
         </div>
       </div>
     </div>
+    <common_footer_view/>
   </div>
 </template>
 <script src="@/assets/js/simple/modules/article/article_home.js"></script>
 
 <style scoped>
-@import "../../assets/js/icon/style.css";
+@import "../../assets/css/font-awesome/css/font-awesome.min.css";
 </style>

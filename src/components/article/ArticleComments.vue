@@ -1,5 +1,6 @@
 <template>
-  <div class="main" style="margin-top: 45px;">
+  <div class="main">
+    <common_header_view/>
     <div class="co_comment">
       <div
         class="loading"
@@ -18,8 +19,8 @@
         <span>全部评论</span>
         <span id="co_comment_num">({{count}})</span>
       </div>
-      <div class="co_list">
-        <div v-if="items != null" v-for="(item,index) in items" :key="item.commentId">
+      <div v-if="items != null" class="co_list">
+        <div v-for="(item,index) in items" :key="item.commentId">
           <div v-if="index%6 == 0 " style="text-align: center; font-size: 12px; color: #DDDDDD;">
             <label v-html="item.createDate"/>
           </div>
@@ -50,7 +51,7 @@
         </div>
       </div>
       <div class="part_comment" id="part_comment">
-        <textarea class="co_tt" placeholder="说说你的见解呗" rows="1" maxlength="50" name="co_tt"></textarea>
+        <textarea class="co_tt" placeholder="说说你的见解" rows="1" maxlength="50" name="co_tt"></textarea>
         <input class="co_btn" type="button" value="评论" @click="doComment()">
       </div>
     </div>
@@ -59,7 +60,6 @@
 
 <script src="@/assets/js/simple/modules/article/article_comments.js"></script>
 <style scoped>
-@import "../../assets/js/icon/style.css";
 .left_comment {
   display: flex;
   padding: 10px;

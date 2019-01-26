@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import router from '@/router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import $ from 'jquery'
@@ -20,9 +19,8 @@ Vue.use(VueAxios, axios)
 var current
 var num = 0
 export default {
-  name: 'comment',
-  template: '<Comments/>',
-  router,
+  name: 'Login',
+  template: '<Login/>',
   // eslint-disable-next-line
   data() {
     return {
@@ -32,8 +30,12 @@ export default {
       count: 0
     }
   },
+  beforeCreate: function () {
+  },
   created: function () {
     current = this
+  },
+  beforeDestroy: function () {
   },
   destroyed: function () {
   },
@@ -82,7 +84,8 @@ export default {
           }
           // save the login info
           $.session.set('user', JSON.stringify(response.data.data), true)
-          this.$router.push({ path: '/' })
+          current.goBack()
+          return true
         })
         .catch(error => {
           // catch 指请求出错的处理
@@ -98,6 +101,11 @@ export default {
         pwd.attr('type', 'password')
         $(_p).css('color', '#c1b6b6')
       }
+    },
+    goBack: function () {
+      window.history.length > 1
+        ? this.$router.go(-1)
+        : this.$router.push('/')
     },
     //
     onCompleted: function () {

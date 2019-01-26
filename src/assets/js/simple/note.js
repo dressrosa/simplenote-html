@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 window.imgHead = "http://xiaoyu1-1253813687.costj.myqcloud.com/";
 var blankPage = '<div class="blank_mug"><span><i class="icon_mug" style="cursor:default;"></i></span></div>';
 
@@ -57,24 +56,24 @@ function writeBox() {
 
 $(document).ready(function () {
     var userInfo = jQuery.parseJSON($.session.get("user"));
-    $.ajax({
-        type: "get",
-        async: true,
-        url: '/api/v1/message/unread-num',
-        beforeSend: function (xhr) {
-            var $u = jQuery.parseJSON($.session.get("user"));
-            if (!checkNull(userInfo)) {
-                xhr.setRequestHeader('token', $u.token);
-                xhr.setRequestHeader('userId', $u.userId);
-            }
-        },
-        success: function (data) {
-            if (data != null && data != '') {
-                var obj = data;
-                if (obj.code == '0') {
-                    writeBox();
-                }
-            }
-        }
-    });
+    // $.ajax({
+    //     type: "get",
+    //     async: true,
+    //     url: '/api/v1/message/unread-num',
+    //     beforeSend: function (xhr) {
+    //         var $u = jQuery.parseJSON($.session.get("user"));
+    //         if (!checkNull(userInfo)) {
+    //             xhr.setRequestHeader('token', $u.token);
+    //             xhr.setRequestHeader('userId', $u.userId);
+    //         }
+    //     },
+    //     success: function (data) {
+    //         if (data != null && data != '') {
+    //             var obj = data;
+    //             if (obj.code == '0') {
+    //                 writeBox();
+    //             }
+    //         }
+    //     }
+    // });
 });

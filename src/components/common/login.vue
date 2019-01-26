@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="full_body">
     <div class="login_main">
       <div class="login_panel">
         <form id="xyForm" role="form" action="#" method="post" class="panel_form loginform">
@@ -11,6 +11,7 @@
             name="loginName"
             id="loginName"
             maxlength="20"
+            autocomplete="off"
           >
           <div class="eye_input">
             <input
@@ -21,8 +22,9 @@
               name="password"
               id="password"
               maxlength="20"
+              autocomplete="off"
             >
-            <label class="addon icon-eye" @click="showPwd($event)"></label>
+            <label class="addon fa fa-eye" @click="showPwd($event)"></label>
           </div>
           <ul class="list-group">
             <input type="button" value="登录" class="xbtn logining" @click="doLogin()">
@@ -48,6 +50,7 @@
             name="loginName"
             id="loginName1"
             maxlength="20"
+            autocomplete="off"
           >
           <div class="eye_input">
             <input
@@ -58,6 +61,7 @@
               name="password"
               id="password1"
               maxlength="20"
+              autocomplete="off"
             >
             <label class="addon icon-eye" @click="showPwd($event)"></label>
           </div>
@@ -69,6 +73,7 @@
             name="repassword"
             id="repassword"
             maxlength="20"
+            autocomplete="off"
           >
           <ul class="list-group">
             <input type="button" value="注册" class="xbtn registering">
@@ -92,9 +97,19 @@
 </template>
 
 <script src="@/assets/js/simple/modules/user/login.js"></script>
-<style >
+<style scoped>
 @import "../../assets/css/simple_mobile.css";
-body {
+@import "../../assets/css/font-awesome/css/font-awesome.min.css";
+button {
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+.full_body {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  left: 0px;
   font-family: "Lato", "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 15px;
   line-height: 25px;
@@ -104,15 +119,6 @@ body {
   background-attachment: fixed;
   position: fixed;
 }
-
-input[type="button"],
-input[type="submit"],
-input[type="file"],
-button {
-  cursor: pointer;
-  -webkit-appearance: none;
-}
-
 .login_main {
   position: fixed;
   bottom: 45%;
@@ -121,6 +127,7 @@ button {
   align-items: center;
   width: 100%;
   height: 50%;
+  background-color: rgba(255, 255, 255, 0.51);
 }
 
 .login_input {

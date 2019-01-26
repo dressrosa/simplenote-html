@@ -1,32 +1,25 @@
 <template>
-  <div class="header">
-    <div class="container">
-      <div style="float: left;">
-        <a class="header_w" href="/">首页</a>
+  <div style="margin-bottom: 45px;">
+    <div class="common_header">
+      <div class="header_arrow" @click="goBack()">
+        <i class="fa fa-angle-left"></i>
       </div>
-      <div class="search_span1">
+      <!-- <div class="header_search">
         <input class="input_search" placeholder="搜索文章">
-        <i class="icon_search search" href="/"></i>
+        <i class="fa fa-search search" href="/"></i>
+      </div>-->
+      <!-- <div v-if="loginInfo != null" id="userSpan" class="header_user">
+        <a class="header_w" id="nickname" href="/mine" v-html="loginInfo.nickname"></a>
       </div>
-      <div v-if="loginInfo != null" id="userSpan" style="float: right; display: block;">
-        <a
-          class="header_w"
-          style="padding-right: 15px;"
-          id="nickname"
-          :href="/user/ + loginInfo.userId"
-          v-html="loginInfo.nickName"
-        ></a>
-      </div>
-      <div v-if="loginInfo == null" id="loginSpan" style="float: right; display: block;">
-        <a class="header_w" href="/login" id="login">登录</a>
-        <!-- onclick="javascript:gotoLogin('/')" -->
-      </div>
+      <div v-else id="loginSpan" class="header_user">
+        <a class="header_w" @click="login()" id="login">登录</a>
+      </div>-->
     </div>
   </div>
 </template>
 
 <script>
-// import Vue from 'vue'
+// import Vue from "vue";
 // import Meta from 'vue-meta'
 // Vue.use(Meta)
 // export default {
@@ -51,7 +44,53 @@
 // }
 </script>
 <script src="@/assets/js/simple/header.js"></script>
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style>
 @import "../assets/css/simple_mobile.css";
+</style>
+<style scoped>
+@import "../assets/css/font-awesome/css/font-awesome.min.css";
+.common_header {
+  position: fixed;
+  display: flex;
+  top: 0px;
+  left: 0px;
+  height: 45px;
+  width: 100%;
+  background: #cf4647;
+  box-shadow: 0px 0px 5px #a7a7a7;
+  z-index: 99;
+  -webkit-transition: background 0.5s;
+  white-space: nowrap;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.header_arrow {
+  position: absolute;
+  left: 5px;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  font-size: 2em;
+  color: #ffffff;
+}
+.header_search {
+  /* input垂直居中 */
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  display: none;
+}
+.header_user {
+  position: absolute;
+  right: 5px;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  display: initial;
+}
 </style>

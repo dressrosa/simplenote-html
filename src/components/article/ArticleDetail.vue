@@ -1,8 +1,9 @@
 <template>
   <div>
+    <common_header_view/>
     <div
       class="container main article"
-      style="margin-top: 45px; position: absolute; overflow-y: scroll; -webkit-overflow-scrolling: touch;"
+      style="position: absolute; overflow-y: scroll; -webkit-overflow-scrolling: touch;"
     >
       <div class="part_down">
         <div class="ar_title">
@@ -16,7 +17,7 @@
             <vue-showdown v-if="item.content != null" :markdown="item.content"/>
           </div>
           <div class="ar_time">
-            <i class="icon_lightbulb_alt"></i>
+            <i class="fa fa-tint"></i>
             <label v-html="item.createTime"></label>
           </div>
           <div class="ar_more">
@@ -28,15 +29,15 @@
       <div class="part_up">
         <div class="side_right">
           <div class="i_content red" style="color: #bfbfbf">
-            <i class="icon_like"></i>
+            <i class="fa fa-thumbs-o-up"></i>
             <label v-html="item.attr==null?'':item.attr.likeNum"></label>
           </div>
           <div class="i_content green" style="color: #bfbfbf">
-            <i class="icon_comment_alt"></i>
+            <i class="fa fa-comment-o"></i>
             <label v-html="item.attr==null?'':item.attr.commentNum">0</label>
           </div>
           <div class="i_content blue" style="color: #bfbfbf">
-            <i class="icon_heart_alt"></i>
+            <i class="fa fa-heart-o"></i>
             <label v-html="item.attr==null?'':item.attr.collectNum">0</label>
           </div>
         </div>
@@ -70,9 +71,8 @@
         <div class="co_num">
           <span>最新评论</span>
         </div>
-        <div class="co_list">
+        <div v-if="commentsItems != null" class="co_list">
           <div
-            v-if="commentsItems != null"
             v-for="coItem in commentsItems"
             class="co_item"
             :key="coItem.commentId"
@@ -92,11 +92,11 @@
                 <p v-html="coItem.content"></p>
               </div>
               <div v-if="coItem.isLike == 1" class="item_like">
-                <i class="icon_like" style="color:#fd4d4d;" data-like="1"></i>
+                <i class="fa fa-thumbs-up" style="color:#fd4d4d;" data-like="1"></i>
                 <label class="co_item_label" v-html="coItem.num"></label>
               </div>
               <div v-if="coItem.isLike == 0" class="item_like">
-                <i class="icon_like" data-like="0"></i>
+                <i class="fa fa-thumbs-o-up" data-like="0"></i>
                 <label class="co_item_label" v-html="coItem.num"></label>
               </div>
             </div>
@@ -104,16 +104,16 @@
               <label class="item_p_title_pure" v-html="coItem.createDate"></label>
             </div>
           </div>
-          <div v-if="commentsItems != null" class="co_all">
+          <div class="co_all">
             <span>
               <a @click="getAllComments()">查看全部</a>
             </span>
           </div>
-          <div v-if="commentsItems == null" class="blank_mug">
-            <span>
-              <i class="icon_mug" style="cursor: default;"></i>
-            </span>
-          </div>
+        </div>
+        <div v-else class="blank_mug">
+          <span>
+            <i class="icon_mug" style="cursor: default;"></i>
+          </span>
         </div>
       </div>
     </div>
@@ -126,5 +126,5 @@
 
 <script src="@/assets/js/simple/modules/article/article_detail.js"></script>
 <style scoped>
-@import "../../assets/js/icon/style.css";
+@import "../../assets/css/font-awesome/css/font-awesome.min.css";
 </style>

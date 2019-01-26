@@ -1,7 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import router from '@/router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import $ from 'jquery'
@@ -13,6 +12,7 @@ import jquerysession from '@/assets/js/simple/jquerysession'
 import { zoom } from '@/assets/js/other/pinchzoom'
 import '@/assets/js/simple/note'
 import 'highlight.js/styles/github.css'
+import Header from '@/components/Header'
 Vue.use(VueAxios, axios)
 Vue.use(VueShowdown, {
   options: {
@@ -21,9 +21,11 @@ Vue.use(VueShowdown, {
 })
 var current
 export default {
-  name: 'articleDetail',
+  name: 'ArticleDetail',
   template: '<ArticleDetail/>',
-  router,
+  components: {
+    common_header_view: Header
+  },
   data() {
     return {
       /* eslint-disable */
@@ -32,22 +34,44 @@ export default {
       commentsItems: null
     }
   },
-  mounted: function () {
+  beforeRouteEnter: function (to, from, next) {
+    next(vm => {
+      if (vm.$route.meta.returnback) {
+        var _scrollTop = $.session.get(vm.$router.name)
+        document.body.scrollTop = _scrollTop
+      } else {
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+      }
+    })
+  },
+  beforeRouteLeave: function (to, from, next) {
+    var _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    $.session.set(this.$route.name, _scrollTop, true)
+    from.meta.returnback = true
+    next()
+  },
+  activated: function () {
+    if (!this.$route.meta.returnback) {
+      current.getArticleDetail()
+    }
+  },
+  created: function () {
     current = this
     current.getArticleDetail()
+  },
+  mounted: function () {
     current.onCompleted()
   },
   methods: {
     getArticleDetail: function () {
       var _token = ''
       var _userId = ''
-      $(function () {
-        var _userInfo = $.parseJSON($.session.get('user'))
-        if (!checkNull(_userInfo)) {
-          _token = _userInfo.token
-          _userId = _userInfo.userId
-        }
-      })
+      var _userInfo = $.parseJSON($.session.get('user'))
+      if (!checkNull(_userInfo)) {
+        _token = _userInfo.token
+        _userId = _userInfo.userId
+      }
       var _articleId = this.$route.params.articleId
       Vue.axios.get('/api/v1/article/' + _articleId, {
         headers: {

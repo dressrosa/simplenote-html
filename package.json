@@ -17,10 +17,12 @@
     "axios": "^0.18.0",
     "highlight.js": "^9.13.1",
     "jquery": "^1.12.2",
+    "mint-ui": "^2.2.13",
+    "scriptjs": "^2.5.9",
     "vue": "^2.5.2",
     "vue-axios": "^2.1.4",
     "vue-meta": "^1.5.6",
-    "vue-router": "^3.0.1",
+    "vue-router": "^3.0.2",
     "vue-showdown": "^2.2.1",
     "vue-toast-mobile": "^2.0.0",
     "vue2-toast": "^2.0.2"

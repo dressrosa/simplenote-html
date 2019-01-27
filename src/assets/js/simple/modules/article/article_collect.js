@@ -54,7 +54,7 @@ export default {
     current.getCollects(1, _pageSize)
   },
   destroyed: function () {
-    $(window).unbind('scroll');
+    $(window).unbind('scroll')
   },
   mounted: function () {
     current.onCompleted()
@@ -72,7 +72,7 @@ export default {
         url: '/api/v1/article/collects',
         headers: {
           pageNum: _pageNum,
-          pageSize: _pageSize,
+          pageSize: _pageSize
         },
         params: {
           userId: _userId
@@ -92,7 +92,7 @@ export default {
           } else {
             _ret.forEach(v => {
               current.items.push(v)
-            });
+            })
           }
           //  current.$forceUpdate()
           _lock = false

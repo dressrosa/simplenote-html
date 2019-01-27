@@ -3,7 +3,6 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
-import '@/assets/js/simple/note'
 // eslint-disable-next-line
 import jquerysession from '@/assets/js/simple/jquerysession'
 import 'vue2-toast/lib/toast.css'

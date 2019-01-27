@@ -10,7 +10,6 @@ import hljs from 'highlight.js'
 /* eslint-disable */
 import jquerysession from '@/assets/js/simple/jquerysession'
 import { zoom } from '@/assets/js/other/pinchzoom'
-import '@/assets/js/simple/note'
 import 'highlight.js/styles/github.css'
 import Header from '@/components/Header'
 Vue.use(VueAxios, axios)

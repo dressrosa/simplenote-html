@@ -4,7 +4,6 @@ import router from '@/router'
 import $ from 'jquery'
 // eslint-disable-next-line
 import jquerysession from '@/assets/js/simple/jquerysession'
-import '@/assets/js/simple/note'
 Vue.config.productionTip = false
 var current
 export default {

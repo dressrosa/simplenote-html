@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/article/Home'
-import ArticleDetail from '@/components/article/ArticleDetail'
 import ArticleComments from '@/components/article/ArticleComments'
 import Login from '@/components/common/Login'
 import Mine from '@/components/user/Mine'
@@ -10,11 +9,15 @@ import ArticleCollect from '@/components/article/ArticleCollect'
 import MineFollowing from '@/components/user/MineFollowing'
 import MineComments from '@/components/user/MineComments'
 import MineEdit from '@/components/user/MineEdit'
-import ArticleEdit from '@/components/article/ArticleEdit'
-import ArticleWrite from '@/components/article/ArticleWrite'
+// import ArticleDetail from '@/components/article/ArticleDetail'
+// import ArticleEdit from '@/components/article/ArticleEdit'
+// import ArticleWrite from '@/components/article/ArticleWrite'
 import Hello from '@/components/note/Hello'
 import NoteLeft from '@/components/note/NoteLeft'
 Vue.use(Router)
+const ArticleDetail = resolve => require(['@/components/article/ArticleDetail'], resolve)
+const ArticleEdit = resolve => require(['@/components/article/ArticleEdit'], resolve)
+const ArticleWrite = resolve => require(['@/components/article/ArticleWrite'], resolve)
 
 export default new Router({
   mode: 'history',

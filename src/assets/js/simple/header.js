@@ -3,7 +3,6 @@ import Vue from 'vue'
 import router from '@/router'
 import $ from 'jquery'
 import jquerysession from '@/assets/js/simple/jquerysession'
-import '@/assets/js/simple/note'
 Vue.config.productionTip = false
 export default {
   name: 'CommonHeader',

@@ -1,13 +1,15 @@
 <template>
   <div>
-    <common_header_view/>
+    <div>
+      <div class="common_header"></div>
+    </div>
     <div class="top">
       <div class="top_n1">
         <div
           class="top_n1_banner"
           style="opacity: 1; background-image: url(http://xiaoyu1-1253813687.costj.myqcloud.com/common/pic_home_bg.jpg);"
         ></div>
-        <div class="top_n1_info">
+        <div class="top_n1_info" id="top_n1_info">
           <label>见字如面,不慵不扰</label>
           <div class="search_module">
             <div style="width:100%;">
@@ -42,7 +44,7 @@
               </div>
               <div class="item_ar" :id="ar.articleId" @click="itemClick($event)">
                 <dt class="item_ar_title" v-html="ar.title"></dt>
-                <p class="item_ar_content" v-html="ar.content+'...'"></p>
+                <p class="item_ar_content" v-html="ar.brief+'...'"></p>
               </div>
               <div class="comment_bar">
                 <div class="bar_part">
@@ -139,5 +141,21 @@
 <script src="@/assets/js/simple/modules/article/article_home.js"></script>
 
 <style scoped>
+@import "../../assets/css/simple_mobile.css";
 @import "../../assets/css/font-awesome/css/font-awesome.min.css";
+.common_header {
+  position: fixed;
+  display: flex;
+  top: 0px;
+  left: 0px;
+  height: 45px;
+  width: 100%;
+  background: #cf4647;
+  box-shadow: 0px 0px 5px #a7a7a7;
+  z-index: 99;
+  -webkit-transition: background 0.5s;
+  white-space: nowrap;
+  -ms-flex-align: center;
+  align-items: center;
+}
 </style>

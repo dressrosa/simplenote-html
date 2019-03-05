@@ -2,10 +2,10 @@ import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import $ from 'jquery'
-import { checkNull } from '@/assets/js/simple/common'
+import { checkNull, unbindScroll } from '@/assets/js/simple/common'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
 // eslint-disable-next-line
-import jquerysession from '@/assets/js/simple/jquerysession'
+import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import Header from '@/components/Header'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
@@ -21,7 +21,7 @@ Vue.use(Toast, {
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 var current
-var _lock = true
+var _lock = false
 var _pageNum = 1
 var _pageSize = 10
 export default {
@@ -42,13 +42,15 @@ export default {
   },
   beforeRouteEnter: function (to, from, next) {
     next(vm => {
-      var _scrollTop = $.session.get(vm.$router.name)
+      let _scrollTop = getItem(vm.$route.name)
       document.body.scrollTop = _scrollTop
+      vm.bindScroll()
     })
   },
   beforeRouteLeave: function (to, from, next) {
-    var _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-    $.session.set(this.$route.name, _scrollTop, true)
+    let _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    setItem(this.$route.name, _scrollTop)
+    unbindScroll()
     next()
   },
   created: function () {
@@ -56,22 +58,22 @@ export default {
     current.getComments(1, _pageSize)
   },
   destroyed: function () {
-    $(window).unbind('scroll')
   },
   mounted: function () {
     current.onCompleted()
   },
   methods: {
     getComments: function (_pageNum, _pageSize) {
-      var _token = ''
-      var _userId = ''
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _token = ''
+      let _userId = ''
+      let _userInfo = JSON.parse(getItem('user'))
       if (!checkNull(_userInfo)) {
         current.user = _userInfo
         current.isLogin = true
         _token = _userInfo.token
         _userId = _userInfo.userId
       }
+      _lock = true
       Vue.axios({
         method: 'get',
         url: '/api/v1/user/comments',
@@ -86,6 +88,7 @@ export default {
         }
       })
         .then(response => {
+          _lock = false
           // then 指成功之后的回调 (注意：使用箭头函数，可以不考虑this指向)
           if (response.data.code !== 0) {
             return false
@@ -93,7 +96,7 @@ export default {
           if (checkNull(response.data.data)) {
             return false
           }
-          var _ret = response.data.data
+          let _ret = response.data.data
           if (current.items == null) {
             current.items = _ret
           } else {
@@ -102,16 +105,15 @@ export default {
             })
           }
           current.$nextTick(function () {
-            $('.mint-cell-value').each(function () {
-              $(this).css({
-                'width': '100%'
-              })
-            })
+            let cell = document.getElementsByClassName('mint-cell-value')
+            for (let i = 0; i < cell.length; i++) {
+              cell[i].style.width = '100%'
+            }
           })
           //  current.$forceUpdate()
-          _lock = false
         })
         .catch(error => {
+          _lock = false
           // catch 指请求出错的处理
           console.log(error)
         })
@@ -125,7 +127,6 @@ export default {
         cancelButtonText: '取消'
       }).then(action => {
         if (action === 'confirm') {
-          console.log(1)
           // $('#' + commentId).css({
           //   'opacity': '0',
           //   '-webkit-transition': 'opacity 2s',
@@ -142,21 +143,25 @@ export default {
       })
     },
     //
-    onCompleted: function () {
+    bindScroll: function () {
       $(function () {
-        $(window).scroll(function () {
+        $(window).scroll(() => {
+          let loading = document.getElementsByClassName('loading')[0]
           if (getScrollTop() + getClientHeight() === getScrollHeight()) {
             if (!_lock) {
               _lock = true
-              $('.loading').css('visibility', 'visible')
-              setTimeout(function () {
+              loading.style.visibility = 'visible'
+              setTimeout(() => {
                 current.getComments(++_pageNum, _pageSize)
-                $('.loading').css('visibility', 'hidden')
+                loading.style.visibility = 'hidden'
               }, 50)
             }
           }
         })
       })
+    },
+    //
+    onCompleted: function () {
     }
   }
 }

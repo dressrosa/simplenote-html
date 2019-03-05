@@ -22,7 +22,7 @@
       </div>
       <link rel="stylesheet" href="/static/editor.md/css/editormd.min.css">
       <div id="markdown-editor">
-        <textarea style="display:none;"></textarea>
+        <textarea style=""></textarea>
       </div>
     </div>
   </div>

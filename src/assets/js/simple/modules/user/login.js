@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 // eslint-disable-next-line
-import jquerysession from '@/assets/js/simple/jquerysession'
+import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 Vue.use(Toast, {
@@ -17,6 +16,8 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 var current
 var num = 0
+// eslint-disable-next-line
+var _lock = false
 export default {
   name: 'Login',
   template: '<Login/>',
@@ -45,8 +46,10 @@ export default {
   methods: {
     //
     doLogin: function () {
-      var _tip = '信息不能为空'
-      if ($('#password').val() === '' || $('#loginName').val() === '') {
+      let _tip = '信息不能为空'
+      let pas = document.getElementById('password')
+      let loginName = document.getElementById('loginName')
+      if (pas.value === '' || loginName.value === '') {
         if (num > 3 && num < 6) {
           _tip = '能不能认真点,老是不对'
         } else if (num >= 6 && num < 10) {
@@ -61,44 +64,47 @@ export default {
         num++
         return
       }
+      _lock = true
       Vue.axios({
         method: 'post',
         url: '/api/v1/user/login',
         headers: {
         },
         data: {
-          password: $('#password').val(),
-          loginName: $('#loginName').val()
+          password: pas.value,
+          loginName: loginName.value
         }
       })
         .then(response => {
+          _lock = false
           if (response.data.code !== 0) {
             this.$toast.bottom('登录失败')
             return false
           }
-          var _ret = response.data.data
+          let _ret = response.data.data
           if (checkNull(_ret)) {
             this.$toast.bottom('登录失败')
             return false
           }
           // save the login info
-          $.session.set('user', JSON.stringify(response.data.data), true)
+          setItem('user', JSON.stringify(response.data.data))
           current.goBack()
           return true
         })
         .catch(error => {
+          _lock = false
           // catch 指请求出错的处理
           console.log(error)
         })
     },
-    showPwd: function (_p) {
-      var pwd = $('.pwd')
-      if (pwd.attr('type') === 'password') {
+    showPwd: function (event) {
+      let pwd = document.getElementsByClassName('pwd')[0]
+      if (pwd.getAttribute('type') === 'password') {
         pwd.attr('type', 'text')
-        $(_p).css('color', '#de5252b5')
+        event.currentTarget.style.color = '#de5252b5'
       } else {
-        pwd.attr('type', 'password')
-        $(_p).css('color', '#c1b6b6')
+        pwd.setAttribute('type', 'password')
+        event.currentTarget.style.color = '#c1b6b6'
       }
     },
     goBack: function () {

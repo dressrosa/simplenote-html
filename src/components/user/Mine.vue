@@ -1,6 +1,5 @@
 <template>
-  <div class="full_body">
-    <common_header_view/>
+  <div v-cloak class="full_body">
     <div class="mine_header" v-if="items != null" @click="goEdit()">
       <div>
         <img class="mine_avatar" :src="headForImg+items.avatar">
@@ -20,6 +19,17 @@
       </div>
     </div>
     <div style="margin-top:5px; height: 100%;">
+      <div class="mine_out_module" @click="goNotes()">
+        <div>
+          <i class="fa fa-paper-plane" style="color:#aa7dc3;"></i>
+        </div>
+        <div class="mine_label">
+          <label>纸条</label>
+        </div>
+        <div class="mine_arrow">
+          <i class="fa fa-angle-right"></i>
+        </div>
+      </div>
       <div class="mine_out_module" @click="goArticles()">
         <div>
           <i class="fa fa-leaf" style="color:#34a539;"></i>
@@ -97,6 +107,9 @@
 <style scoped>
 @import "../../assets/css/simple_mobile.css";
 @import "../../assets/css/font-awesome/css/font-awesome.min.css";
+[v-cloak] {
+  display: none !important;
+}
 .full_body {
   position: fixed;
   height: 100%;
@@ -112,7 +125,7 @@
 }
 .mine_header {
   display: flex;
-  padding: 30px;
+  padding: 35px;
   background-color: white;
   cursor: auto;
 }

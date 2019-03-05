@@ -126,7 +126,7 @@ li {
 }
 
 .transparent_header {
-    background: rgba(214, 68, 68, 0);
+    background: rgba(255, 255, 255, 0);
     box-shadow: 0px 0px 0px;
 }
 
@@ -293,12 +293,10 @@ li a {
 .search_span1 {
     /* input垂直居中 */
     display: -webkit-flex;
-    display: flex;
     -webkit-align-items: center;
     align-items: center;
     -webkit-justify-content: center;
     justify-content: center;
-    display: none;
 }
 .search_module {
     border: 0px;
@@ -395,7 +393,7 @@ li a {
 
 .item_useravatar {
     margin-top: auto;
-    margin-bottom: auto;
+    /* margin-bottom: auto; */
 }
 
 .item_ar_content {

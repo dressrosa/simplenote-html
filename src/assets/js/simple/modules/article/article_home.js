@@ -2,14 +2,13 @@ import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import $ from 'jquery'
-import { checkNull } from '@/assets/js/simple/common'
+import { checkNull, unbindScroll } from '@/assets/js/simple/common'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
 // eslint-disable-next-line
-import jquerysession from '@/assets/js/simple/jquerysession'
+import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 import Footer from '@/components/Footer'
-import Header from '@/components/Header'
 Vue.use(Toast, {
   type: 'bottom',
   duration: 1000,
@@ -26,13 +25,12 @@ export default {
   name: 'Home',
   template: '<Home/>',
   components: {
-    common_header_view: Header,
     common_footer_view: Footer
   },
   // eslint-disable-next-line
   data() {
     return {
-      /* eslint-disable */
+      // eslint-disable-next-line
       headForImg: imgHead,
       items: null,
       isLogin: false
@@ -40,33 +38,34 @@ export default {
   },
   beforeRouteEnter: function (to, from, next) {
     next(vm => {
-      var _scrollTop = $.session.get(vm.$router.name)
-      document.body.scrollTop = _scrollTop
+      vm.bindScroll()
+      let _scrollTop = getItem(vm.$route.name)
+      if (!checkNull(_scrollTop)) {
+        document.body.scrollTop = _scrollTop
+      }
     })
   },
   beforeRouteLeave: function (to, from, next) {
-    var _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-    $.session.set(this.$route.name, _scrollTop, true)
+    let _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    setItem(this.$route.name, _scrollTop)
     to.meta.returnback = false
+    unbindScroll()
     next()
   },
   created: function () {
     current = this
-    $('.header').addClass('transparent_header')
     current.getHotList(1, _pageSize)
   },
   destroyed: function () {
-    $(window).unbind('scroll')
-    $('.header').removeClass('transparent_header')
   },
   mounted: function () {
     current.onCompleted()
   },
   methods: {
     getHotList: function (_pageNum, _pageSize) {
-      var _token = ''
-      var _userId = ''
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _token = ''
+      let _userId = ''
+      let _userInfo = JSON.parse(getItem('user'))
       if (!checkNull(_userInfo)) {
         current.isLogin = true
         _token = _userInfo.token
@@ -90,13 +89,13 @@ export default {
           if (checkNull(response.data.data)) {
             return false
           }
-          var _ret = response.data.data
+          let _ret = response.data.data
           if (current.items == null) {
             current.items = _ret
           } else {
             _ret.forEach(v => {
               current.items.push(v)
-            });
+            })
           }
           //  current.$forceUpdate()
           _lock = false
@@ -107,25 +106,25 @@ export default {
         })
     },
     itemClick: function (event) {
-      var _articleId = event.currentTarget.id
+      let _articleId = event.currentTarget.id
       this.$router.push({ path: '/article/' + _articleId })
     },
     avatarClick: function (event) {
-      var _userId = event.currentTarget.id
+      let _userId = event.currentTarget.id
       window.location.href = '/user/' + _userId
     },
     heartClick: function (event) {
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
         this.$toast.bottom('请先登录')
-        $.session.remove('user')
+        removeItem('user')
         return false
       }
-      var _cur = event.currentTarget
-      var _articleId = event.currentTarget.getAttribute('article-id')
-      var $next = $(_cur).next()
-      var num = $next.html()
-      var _isCollect
+      let _cur = event.currentTarget
+      let _articleId = event.currentTarget.getAttribute('article-id')
+      let $next = $(_cur).next()
+      let num = $next.html()
+      let _isCollect
       if (event.currentTarget.getAttribute('data-heart') === '0') {
         $(_cur).css('color', '#fd4d4d')
         $(_cur).attr('data-heart', '1')
@@ -137,9 +136,8 @@ export default {
         $next.html(num - 1)
         _isCollect = 1
       }
-      var _token = ''
-      var _userId = ''
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _token = ''
+      let _userId = ''
       if (!checkNull(_userInfo)) {
         _token = _userInfo.token
         _userId = _userInfo.userId
@@ -156,10 +154,10 @@ export default {
           isCollect: _isCollect
         }
       }).then(response => {
-        var obj = response.data
+        let obj = response.data
         if (obj.code === '20001') {
           this.$toast.bottom('请先登录')
-          $.session.remove('user')
+          removeItem('user')
           return false
         }
         return true
@@ -168,15 +166,15 @@ export default {
       })
     },
     commentClick: function (event) {
-      var _articleId = event.currentTarget.getAttribute('article-id')
+      let _articleId = event.currentTarget.getAttribute('article-id')
       this.$router.push({ path: '/article/' + _articleId + '/comments' })
     },
     likeClick: function (event) {
-      var _cur = event.currentTarget
-      var _articleId = _cur.getAttribute('article-id')
-      var $next = $(_cur).next()
-      var num = $next.html()
-      var _isLike
+      let _cur = event.currentTarget
+      let _articleId = _cur.getAttribute('article-id')
+      let $next = $(_cur).next()
+      let num = $next.html()
+      let _isLike
       if ($(_cur).attr('data-like') === '0') {
         $(_cur).css('color', '#fd4d4d')
         $(_cur).attr('data-like', '1')
@@ -188,9 +186,9 @@ export default {
         $next.html(num - 1)
         _isLike = 1
       }
-      var _token = ''
-      var _userId = ''
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _token = ''
+      let _userId = ''
+      let _userInfo = JSON.parse(getItem('user'))
       if (!checkNull(_userInfo)) {
         _token = _userInfo.token
         _userId = _userInfo.userId
@@ -205,43 +203,60 @@ export default {
           isLike: _isLike
         }
       }).then(response => {
-        var obj = response.data
+        let obj = response.data
         if (obj.code === '20001') {
           console.log('未登录')
-          $.session.remove('user')
+          removeItem('user')
         }
         return true
       }).catch(error => {
         console.log(error)
       })
     },
-    onCompleted: function () {
+    toTransparentHeader: function () {
+      let n1 = document.getElementById('top_n1_info')
+      if (n1.style.opacity !== 1) {
+        n1.style.opacity = 1
+        let ha = document.getElementsByClassName('common_header')[0]
+        ha.style.boxShadow = '0px 0px 0px'
+        ha.style.background = 'rgba(255, 255, 255, 0)'
+      }
+    },
+    toCommonHeader: function (op) {
+      let n1 = document.getElementById('top_n1_info')
+      if (n1.style.opacity === '1') {
+        let ha = document.getElementsByClassName('common_header')[0]
+        n1.style.opacity = op
+        ha.style.boxShadow = '0px 0px 5px #a7a7a7'
+        ha.style.background = '#CF4647'
+      }
+    },
+    //
+    bindScroll: function () {
       $(function () {
         $(window).scroll(function () {
-          var _top = document.documentElement.scrollTop
+          let _top = document.documentElement.scrollTop
           if (_top > 300) {
-            $('.top_n1_info').css('opacity', 1)
-            $('.header').find('.header_search').css('display', 'flex')
-            $('.header').removeClass('transparent_header')
-            $('.top_n1').find('.header_user').css('display', 'none')
+            current.toTransparentHeader()
           } else {
-            $('.top_n1_info').css('opacity', 1 - _top / 300.0)
-            $('.header').find('.header_search').css('display', 'none')
-            $('.top_n1').find('.header_user').css('display', 'table')
-            $('.header').addClass('transparent_header')
+            current.toCommonHeader(1 - _top / 300.0)
           }
+          let loading = document.getElementsByClassName('loading')[0]
           if (getScrollTop() + getClientHeight() === getScrollHeight()) {
             if (!_lock) {
               _lock = true
-              $('.loading').css('visibility', 'visible')
+              loading.style.visibility = 'visible'
               setTimeout(function () {
                 current.getHotList(++_pageNum, _pageSize)
-                $('.loading').css('visibility', 'hidden')
+                loading.style.visibility = 'hidden'
               }, 50)
             }
           }
         })
       })
+    },
+    //
+    onCompleted: function () {
     }
   }
 }

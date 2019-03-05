@@ -1,9 +1,5 @@
 /* eslint-disable */
 window.imgHead = "http://xiaoyu1-1253813687.costj.myqcloud.com/";
-var confirmjBox;
-$(function () {
-    getDevice();
-})
 
 export function setTitle(item) {
     document.title = item;
@@ -51,7 +47,10 @@ export function getDevice() {
     return osName();
 
 }
-
+//
+export function unbindScroll() {
+    $(window).unbind('scroll')
+}
 // tool function
 
 /**

@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 // eslint-disable-next-line
-import jquerysession from '@/assets/js/simple/jquerysession'
+import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 import Header from '@/components/Header'
@@ -17,6 +16,8 @@ Vue.use(Toast, {
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 var current
+// eslint-disable-next-line
+var _lock = false
 export default {
   name: 'MineEdit',
   template: '<MineEdit/>',
@@ -33,9 +34,9 @@ export default {
   },
   created: function () {
     current = this
-    var _articleId = this.$route.params.articleId
+    let _articleId = this.$route.params.articleId
     console.log('hello:' + _articleId)
-    var _userInfo = $.parseJSON($.session.get('user'))
+    let _userInfo = JSON.parse(getItem('user'))
     if (checkNull(_userInfo)) {
       this.$toast.bottom('请先登录')
       return
@@ -49,7 +50,8 @@ export default {
   },
   methods: {
     doEdit: function (_p) {
-      var _content
+      _lock = true
+      let _content
       Vue.axios({
         method: 'post',
         url: '/api/v1/user/edit',
@@ -61,16 +63,18 @@ export default {
         }
       })
         .then(response => {
+          _lock = false
           if (response.data.code !== 0) {
             return false
           }
           if (checkNull(response.data.data)) {
             return false
           }
-          var _ret = response.data.data
+          let _ret = response.data.data
           current.arItems = _ret
         })
         .catch(error => {
+          _lock = false
           // catch 指请求出错的处理
           console.log(error)
         })

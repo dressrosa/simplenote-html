@@ -1,28 +1,67 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/article/Home'
-import ArticleComments from '@/components/article/ArticleComments'
-import Login from '@/components/common/Login'
+// import ArticleComments from '@/components/article/ArticleComments'
+// import Login from '@/components/common/Login'
 import Mine from '@/components/user/Mine'
-import ArticleMine from '@/components/article/ArticleMine'
-import ArticleCollect from '@/components/article/ArticleCollect'
-import MineFollowing from '@/components/user/MineFollowing'
-import MineComments from '@/components/user/MineComments'
-import MineEdit from '@/components/user/MineEdit'
+// import ArticleMine from '@/components/article/ArticleMine'
+// import ArticleCollect from '@/components/article/ArticleCollect'
+// import MineFollowing from '@/components/user/MineFollowing'
+// import MineComments from '@/components/user/MineComments'
+// import MineEdit from '@/components/user/MineEdit'
 // import ArticleDetail from '@/components/article/ArticleDetail'
 // import ArticleEdit from '@/components/article/ArticleEdit'
 // import ArticleWrite from '@/components/article/ArticleWrite'
-import Hello from '@/components/note/Hello'
-import NoteLeft from '@/components/note/NoteLeft'
+
+// import Loading from '@/components/Loading.vue'
+import { Indicator } from 'mint-ui'
 Vue.use(Router)
-const ArticleDetail = resolve => require(['@/components/article/ArticleDetail'], resolve)
+// const AsyncLoad = component => new Promise((resolve) => {
+//   const load = () => ({ component, loading: Loading })
+//   resolve({
+//     functional: true,
+//     name: 'AsyncLoad',
+//     render: h => h(load)
+//   })
+// })
+const ArticleDetail = resolve => {
+  Indicator.open('Loading...')
+  require(['@/components/article/ArticleDetail'], (component) => {
+    resolve(component)
+    Indicator.close()
+  })
+}
+
+const Login = resolve => require(['@/components/common/Login'], resolve)
+// const ArticleDetail = resolve => require(['@/components/article/ArticleDetail'], resolve)
 const ArticleEdit = resolve => require(['@/components/article/ArticleEdit'], resolve)
 const ArticleWrite = resolve => require(['@/components/article/ArticleWrite'], resolve)
+const ArticleComments = resolve => require(['@/components/article/ArticleComments'], resolve)
+
+const MineComments = resolve => require(['@/components/user/MineComments'], resolve)
+const MineFollowing = resolve => require(['@/components/user/MineFollowing'], resolve)
+const ArticleCollect = resolve => require(['@/components/article/ArticleCollect'], resolve)
+const ArticleMine = resolve => require(['@/components/article/ArticleMine'], resolve)
+const MineEdit = resolve => require(['@/components/user/MineEdit'], resolve)
+
+const ArticleDetailContent = resolve => require(['@/components/article/ArticleDetailContent'], resolve)
+
+const NoteHome = resolve => require(['@/components/note/NoteHome'], resolve)
+const NoteLeft = resolve => require(['@/components/note/NoteLeft'], resolve)
+const NoteMine = resolve => require(['@/components/note/NoteMine'], resolve)
 
 export default new Router({
   mode: 'history',
   base: '',
   routes: [
+    {
+      path: '/content/hello',
+      name: 'ArticleDetailContent',
+      component: ArticleDetailContent,
+      meta: {
+        keepAlive: false
+      }
+    },
     {
       path: '/article/write',
       name: 'ArticleWrite',
@@ -108,9 +147,17 @@ export default new Router({
         returnback: false
       }
     }, {
-      path: '/hello',
-      name: 'Hello',
-      component: Hello,
+      path: '/notes',
+      name: 'Notes',
+      component: NoteHome,
+      meta: {
+        keepAlive: true,
+        returnback: false
+      }
+    }, {
+      path: '/mine/notes',
+      name: 'NoteMine',
+      component: NoteMine,
       meta: {
         keepAlive: true,
         returnback: false

@@ -1,27 +1,24 @@
-/* eslint-disable */
 import Vue from 'vue'
 import router from '@/router'
-import $ from 'jquery'
-import jquerysession from '@/assets/js/simple/jquerysession'
+// eslint-disable-next-line
+import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 Vue.config.productionTip = false
 export default {
   name: 'CommonHeader',
   template: '<CommonHeader/>',
   router,
+  // eslint-disable-next-line
   data() {
     return {
-      /* eslint-disable */
+      // eslint-disable-next-line
       loginInfo: null,
     }
   },
   beforeCreated: function () {
   },
   created: function () {
-    // var _userInfo = $.parseJSON($.session.get('user'))
-    // this.loginInfo = _userInfo;
   },
   destroyed: function () {
-    $(window).unbind('scroll');
   },
   mounted: function () {
   },
@@ -29,7 +26,7 @@ export default {
     login: function () {
       var _routePath = this.$route.path
       console.log('routeName:' + _routePath)
-      $.session.set('jumpPath', _routePath)
+      setItem('jumpPath', _routePath)
       this.$router.push({ path: '/login' })
     },
     goBack: function () {

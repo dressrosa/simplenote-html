@@ -32,7 +32,7 @@
             style="color:#487eb3;"
           ></i>
         </div>
-        <p class="item_content" :article-id="ar.articleId" v-html="ar.content+'...'"></p>
+        <p class="item_content" :article-id="ar.articleId" v-html="ar.brief+'...'"></p>
         <!-- <div class="comment_bar">
           <div class="bar_part">
             <i v-if="ar.isLike == 1" class="fa fa-thumbs-up" style="color:#fd4d4d" data-like="1"></i>

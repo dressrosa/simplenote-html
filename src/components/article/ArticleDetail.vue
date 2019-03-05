@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-cloak>
     <common_header_view/>
     <div
       class="container main article"
@@ -13,9 +13,10 @@
           <span v-if="item.attr==null" class="ar_view">浏览量:0</span>
         </div>
         <div class="note_each">
-          <div class="ar_content">
-            <vue-showdown v-if="item.content != null" :markdown="item.content"/>
-          </div>
+          <!-- <div class="ar_content">
+             <vue-showdown v-if="item.content != null" :markdown="item.content"/>
+          </div> -->
+          <article_detail_content_view/>
           <div class="ar_time">
             <i class="fa fa-tint"></i>
             <label v-html="item.createTime"></label>
@@ -127,4 +128,7 @@
 <script src="@/assets/js/simple/modules/article/article_detail.js"></script>
 <style scoped>
 @import "../../assets/css/font-awesome/css/font-awesome.min.css";
+[v-cloak] {
+  display: none !important;
+}
 </style>

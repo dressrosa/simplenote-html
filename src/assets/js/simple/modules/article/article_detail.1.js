@@ -1,12 +1,28 @@
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
+import VueShowdown from 'vue-showdown'
+import hljs from 'highlight.js'
+// eslint-disable-next-line
 import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
+import { zoom } from '@/assets/js/other/pinchzoom'
+import 'highlight.js/styles/github.css'
 import Header from '@/components/Header'
-const ArticleDetailContent = resolve => require(['@/components/article/ArticleDetailContent'], resolve)
+const ArticleDetailContent = resolve => {
+  require(['@/components/article/ArticleDetail_Content'], (component) => {
+    resolve(component)
+  })
+}
 Vue.use(VueAxios, axios)
+Vue.use(VueShowdown, {
+  options: {
+    emoji: false
+  }
+})
 var current
 export default {
   name: 'ArticleDetail',
@@ -84,6 +100,9 @@ export default {
             return false
           }
           current.item = ar
+          current.$nextTick(function () {
+            current.pinch()
+          })
           return true
         })
         .catch(error => {
@@ -123,6 +142,39 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    pinch: function () {
+      $(function () {
+        $('.ar_content').find('img').each(function (i) {
+          let _this = $(this)
+          _this.attr('width', '100%')
+          let src = _this.attr('src')
+          _this.bind('click', function () {
+            let t = $('#bigImgdiv')
+            let c = $('#bigimg').attr('src')
+            if (c === undefined || c === 'undefined') {
+              $('<div id="bigImgdiv" style="position: fixed;z-index: 1000;top: 0;left: 0;' +
+                '-webkit-user-drag: none;-moz-user-drag: none;-ms-user-drag: none;user-drag: none;' +
+                'width: 100%;height: 100%;background-color: rgba(255,255,255,0.9);display:none;">' +
+                '<img id="bigimg" style="height: 100%;width: 100%;border: 0;' +
+                'margin:0 auto;" src="' + src + '" /></div>')
+                .appendTo('body')
+              zoom('bigimg', {})
+            }
+            t = $('#bigImgdiv')
+            $('#bigimg').attr('src', src)
+            t.attr('display', 'block')
+            t.fadeIn('fast')
+            $('#bigImgdiv').click(function () {
+              $(this).attr('display', 'none')
+              $(this).fadeOut('fast')
+            })
+          })
+        })
+        $('pre code').each(function (i, block) {
+          hljs.highlightBlock(block)
+        })
+      })
     },
     //
     getAllComments: function () {

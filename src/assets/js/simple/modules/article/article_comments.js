@@ -4,7 +4,7 @@ import VueAxios from 'vue-axios'
 import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 // eslint-disable-next-line
-import jquerysession from '@/assets/js/simple/jquerysession'
+import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 import Header from '@/components/Header'
@@ -38,16 +38,16 @@ export default {
   beforeRouteEnter: function (to, from, next) {
     next(vm => {
       if (vm.$route.meta.returnback) {
-        var _scrollTop = $.session.get(vm.$router.name)
+        let _scrollTop = getItem(vm.$route.name)
         document.body.scrollTop = _scrollTop
       } else {
-        // document.body.scrollTop = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)
+        document.body.scrollTop = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)
       }
     })
   },
   beforeRouteLeave: function (to, from, next) {
-    var _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-    $.session.set(this.$route.name, _scrollTop, true)
+    let _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    setItem(this.$route.name, _scrollTop)
     to.meta.returnback = false
     next()
   },
@@ -70,14 +70,14 @@ export default {
   methods: {
     //
     getComments: function (_pageNum, _pageSize) {
-      var _token = ''
-      var _userId = ''
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _token = ''
+      let _userId = ''
+      let _userInfo = JSON.parse(getItem('user'))
       if (!checkNull(_userInfo)) {
         _token = _userInfo.token
         _userId = _userInfo.userId
       }
-      var _articleId = this.$route.params.articleId
+      let _articleId = this.$route.params.articleId
       Vue.axios.get('/api/v1/article/' + _articleId + '/comments', {
         headers: {
           pageNum: _pageNum,
@@ -93,7 +93,7 @@ export default {
           if (response.data.code !== 0) {
             return false
           }
-          var _ret = response.data.data
+          let _ret = response.data.data
           if (checkNull(_ret)) {
             return false
           }
@@ -113,19 +113,19 @@ export default {
     },
     //
     avatarClick: function (event) {
-      var _userId = event.currentTarget.id
+      let _userId = event.currentTarget.id
       window.location.href = '/user/' + _userId
     },
     //
     doComment: function () {
-      var _token = ''
-      var _userId = ''
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _token = ''
+      let _userId = ''
+      let _userInfo = JSON.parse(getItem('user'))
       if (!checkNull(_userInfo)) {
         _token = _userInfo.token
         _userId = _userInfo.userId
       }
-      var _text = $('textarea[name=co_tt]').val()
+      let _text = $('textarea[name=co_tt]').val()
       if (checkNull(_text)) {
         this.$toast.bottom('评论不能为空')
         return false
@@ -135,7 +135,7 @@ export default {
         return false
       }
       $('.co_btn').attr('disabled', 'disabled')
-      var _articleId = this.$route.params.articleId
+      let _articleId = this.$route.params.articleId
 
       Vue.axios({
         method: 'post',
@@ -148,10 +148,10 @@ export default {
           content: _text
         }
       }).then(response => {
-        var obj = response.data
+        let obj = response.data
         if (obj.code === 20001) {
           this.$toast.bottom('请先登录')
-          $.session.remove('user')
+          removeItem('user')
           $('.co_btn').removeAttr('disabled')
           return false
         }
@@ -165,7 +165,7 @@ export default {
           current.items.push(obj.data)
         } else if (obj.code === 20001) {
           this.$toast.bottom('请先登录')
-          $.session.remove('user')
+          removeItem('user')
         }
         $('.co_btn').removeAttr('disabled')
         return true
@@ -176,7 +176,7 @@ export default {
     },
     //
     doLoad: function () {
-      var _top = document.documentElement.scrollTop
+      let _top = document.documentElement.scrollTop
       console.log('top:' + _top)
       if (_top === 0) {
         if (!_lock) {
@@ -192,23 +192,23 @@ export default {
     },
     //
     onCompleted: function () {
-      var outerScroller = document.querySelector('body')
-      var touchStart = 0
-      var touchDis = 0
+      let outerScroller = document.querySelector('body')
+      let touchStart = 0
+      let touchDis = 0
       outerScroller.addEventListener('touchstart', function (event) {
-        var touch = event.targetTouches[0]
+        let touch = event.targetTouches[0]
         // 把元素放在手指所在的位置
         touchStart = touch.pageY
         //  console.log('开始:' + touchStart)
       }, false)
       outerScroller.addEventListener('touchmove', function (event) {
-        var touch = event.targetTouches[0]
+        let touch = event.targetTouches[0]
         // console.log('结束' + touch.pageY)
         touchDis = touch.pageY - touchStart
       }, false)
       outerScroller.addEventListener('touchend', function (event) {
         touchStart = 0
-        var _top = document.documentElement.scrollTop
+        let _top = document.documentElement.scrollTop
         // console.log('滑动距离' + touchDis)
         if (touchDis > 70 && _top === 0) {
           //   console.log('刷新了啊')

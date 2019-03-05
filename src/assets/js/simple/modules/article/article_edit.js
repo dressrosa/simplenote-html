@@ -1,12 +1,11 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import scriptjs from 'scriptjs'
 import { defaultConfig } from '@/assets/js/simple/editorConfig'
 import { checkNull } from '@/assets/js/simple/common'
 // eslint-disable-next-line
-import jquerysession from '@/assets/js/simple/jquerysession'
+import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 Vue.use(Toast, {
@@ -18,7 +17,7 @@ Vue.use(Toast, {
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 var current
-var lock
+var _lock = false
 export default {
   name: 'ArticleEdit',
   template: '<ArticleEdit/>',
@@ -51,12 +50,12 @@ export default {
     },
     initDataDelay: {
       type: Number, // 延迟初始化数据时间，单位毫秒
-      default: 0
+      default: 10
     }
   },
   created: function () {
     current = this
-    var _articleId = this.$route.params.articleId
+    let _articleId = this.$route.params.articleId
     current.getArticle(_articleId)
   },
   destroyed: function () {
@@ -83,6 +82,7 @@ export default {
   },
   methods: {
     getArticle: function (_articleId) {
+      _lock = true
       Vue.axios({
         method: 'get',
         url: '/api/v1/article/' + _articleId,
@@ -91,6 +91,7 @@ export default {
         params: {
         }
       }).then(function (response) {
+        _lock = false
         if (response.data.code !== 0) {
           return false
         }
@@ -100,6 +101,7 @@ export default {
         current.items = response.data.data
         current.init()
       }).catch(error => {
+        _lock = false
         // catch 指请求出错的处理
         console.log(error)
       })
@@ -183,11 +185,11 @@ export default {
     },
     //
     publish: function (event) {
-      if (lock) {
+      if (_lock) {
         return false
       }
-      var _content = current.getMarkdown()
-      var _title = $('.edit_title_input').val()
+      let _content = current.getMarkdown()
+      let _title = document.getElementsByClassName('edit_title_input')[0].value
       if (checkNull(_title)) {
         this.$toast.bottom('标题不能为空')
         return false
@@ -196,16 +198,16 @@ export default {
         this.$toast.bottom('内容不能为空')
         return false
       }
-      lock = true
+      _lock = true
       current.doRefreshButton()
-      var _token = ''
-      var _userId = ''
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _token = ''
+      let _userId = ''
+      let _userInfo = JSON.parse(getItem('user'))
       if (!checkNull(_userInfo)) {
         _token = _userInfo.token
         _userId = _userInfo.userId
       }
-      var _articleId = this.$route.params.articleId
+      let _articleId = this.$route.params.articleId
       Vue.axios({
         method: 'post',
         url: '/api/v1/article/edit',
@@ -220,7 +222,7 @@ export default {
           'articleId': _articleId
         }
       }).then(function (response) {
-        lock = false
+        _lock = false
         current.doRecoverButton()
         if (response.data.code !== 0) {
           current.$toast.bottom(response.data.message)
@@ -233,7 +235,7 @@ export default {
         current.$toast.bottom('修改成功')
         this.$router.push({ path: '/article/' + _articleId })
       }).catch(error => {
-        lock = false
+        _lock = false
         current.doRecoverButton()
         // catch 指请求出错的处理
         console.log(error)
@@ -241,13 +243,13 @@ export default {
     },
     //
     doRefreshButton: function () {
-      var _target = document.getElementById('publish')
+      let _target = document.getElementById('publish')
       _target.innerHTML = '完成'
       _target.className = 'header_w'
     },
     //
     doRecoverButton: function () {
-      var _target = document.getElementById('publish')
+      let _target = document.getElementById('publish')
       _target.innerHTML = ''
       _target.className = 'header_w fa fa-spinner fa-spin'
     },

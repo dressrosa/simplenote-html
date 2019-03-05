@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div style="margin-top: 45px;">
     <div class="footer_modules">
       <div class="footer_item">
         <div class="footer_mo" @click="goTransform(2)" id="footerNote">
           <div class="footer_item_icon">
-            <i v-if="this.$route.name=='Hello'" class="fa fa-paper-plane" style="color:#ED6D54"></i>
+            <i v-if="this.$route.name=='Notes'" class="fa fa-paper-plane" style="color:#ED6D54"></i>
             <i v-else class="fa fa-paper-plane-o"></i>
           </div>
           <div class="footer_item_font">
-            <label v-if="this.$route.name=='Hello'" style="color:#ED6D54">纸条</label>
+            <label v-if="this.$route.name=='Notes'" style="color:#ED6D54">纸条</label>
             <label v-else>纸条</label>
           </div>
         </div>
@@ -25,7 +25,6 @@
           </div>
         </div>
       </div>
-      <!-- style="color:#ED6D54" -->
       <div class="footer_item">
         <div class="footer_mo" @click="goTransform(3)">
           <div class="footer_item_icon">

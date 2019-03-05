@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 // eslint-disable-next-line
-import jquerysession from '@/assets/js/simple/jquerysession'
+import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
-import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 Vue.use(Toast, {
   type: 'bottom',
@@ -22,8 +20,7 @@ export default {
   name: 'Mine',
   template: '<Mine/>',
   components: {
-    common_footer_view: Footer,
-    common_header_view: Header
+    common_footer_view: Footer
   },
   // eslint-disable-next-line
   data() {
@@ -32,6 +29,10 @@ export default {
       headForImg: imgHead,
       items: null
     }
+  },
+  beforeRouteLeave: function (to, from, next) {
+    to.meta.returnback = false
+    next()
   },
   created: function () {
     current = this
@@ -45,9 +46,9 @@ export default {
   methods: {
     //
     freshLoginInfo: function () {
-      var _token = ''
-      var _userId = ''
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _token = ''
+      let _userId = ''
+      let _userInfo = JSON.parse(getItem('user'))
       if (!checkNull(_userInfo)) {
         _token = _userInfo.token
         _userId = _userInfo.userId
@@ -63,11 +64,11 @@ export default {
         }
       })
         .then(response => {
-          var _flag = response.data.data
+          let _flag = response.data.data
           if (_flag) {
             current.items = _userInfo
           } else {
-            $.session.remove('user')
+            removeItem('user')
           }
           return true
         })
@@ -80,8 +81,16 @@ export default {
     goLogin: function () {
       this.$router.push({ path: '/login' })
     },
+    goNotes: function () {
+      let _userInfo = JSON.parse(getItem('user'))
+      if (checkNull(_userInfo)) {
+        this.$toast.bottom('请先登录')
+        return
+      }
+      this.$router.push({ path: '/mine/notes' })
+    },
     goArticles: function () {
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
         this.$toast.bottom('请先登录')
         return
@@ -89,7 +98,7 @@ export default {
       this.$router.push({ path: '/mine/articles' })
     },
     goCollects: function () {
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
         this.$toast.bottom('请先登录')
         return
@@ -97,7 +106,7 @@ export default {
       this.$router.push({ path: '/mine/collects/articles' })
     },
     goFollowing: function () {
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
         this.$toast.bottom('请先登录')
         return
@@ -105,7 +114,7 @@ export default {
       this.$router.push({ path: '/mine/following' })
     },
     goComments: function () {
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
         this.$toast.bottom('请先登录')
         return
@@ -113,7 +122,7 @@ export default {
       this.$router.push({ path: '/mine/comments' })
     },
     goEdit: function () {
-      var _userInfo = $.parseJSON($.session.get('user'))
+      let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
         this.$toast.bottom('请先登录')
         return
@@ -121,7 +130,7 @@ export default {
       this.$router.push({ path: '/mine/edit' })
     },
     avatarClick: function (event) {
-      var _userId = event.currentTarget.id
+      let _userId = event.currentTarget.id
       window.location.href = '/user/' + _userId
     },
     //

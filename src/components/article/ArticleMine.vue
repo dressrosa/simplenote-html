@@ -28,7 +28,7 @@
           <i
             :article-id="ar.articleId"
             @click="goEdit($event)"
-            class="fa fa-pencil"
+            class="fa fa-edit"
             style="color:#487eb3;"
           ></i>
         </div>

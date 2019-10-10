@@ -14,7 +14,7 @@ import Mine from '@/components/user/Mine'
 // import ArticleWrite from '@/components/article/ArticleWrite'
 
 // import Loading from '@/components/Loading.vue'
-import { Indicator } from 'mint-ui'
+// import { Indicator } from 'mint-ui'
 Vue.use(Router)
 // const AsyncLoad = component => new Promise((resolve) => {
 //   const load = () => ({ component, loading: Loading })
@@ -24,16 +24,19 @@ Vue.use(Router)
 //     render: h => h(load)
 //   })
 // })
-const ArticleDetail = resolve => {
-  Indicator.open('Loading...')
-  require(['@/components/article/ArticleDetail'], (component) => {
-    resolve(component)
-    Indicator.close()
-  })
-}
+// const ArticleDetail = resolve => {
+//   Indicator.open('Loading...')
+//   require(['@/components/article/ArticleDetail'], (component) => {
+//     resolve(component)
+//     Indicator.close()
+//   })
+// }
+const ArticleDetail = resolve => require(['@/components/article/ArticleDetail'], resolve)
+// const ArticleDetail = () => AsyncLoad(import('@/components/article/ArticleDetail'))
 
 const Login = resolve => require(['@/components/common/Login'], resolve)
 // const ArticleDetail = resolve => require(['@/components/article/ArticleDetail'], resolve)
+// const ArticleEdit = resolve => require(['@/components/article/ArticleEdit'], resolve)
 const ArticleEdit = resolve => require(['@/components/article/ArticleEdit'], resolve)
 const ArticleWrite = resolve => require(['@/components/article/ArticleWrite'], resolve)
 const ArticleComments = resolve => require(['@/components/article/ArticleComments'], resolve)
@@ -42,9 +45,9 @@ const MineComments = resolve => require(['@/components/user/MineComments'], reso
 const MineFollowing = resolve => require(['@/components/user/MineFollowing'], resolve)
 const ArticleCollect = resolve => require(['@/components/article/ArticleCollect'], resolve)
 const ArticleMine = resolve => require(['@/components/article/ArticleMine'], resolve)
-const MineEdit = resolve => require(['@/components/user/MineEdit'], resolve)
 
-const ArticleDetailContent = resolve => require(['@/components/article/ArticleDetailContent'], resolve)
+const MineEdit = resolve => require(['@/components/user/MineEdit'], resolve)
+const EditInfo = resolve => require(['@/components/user/EditInfo'], resolve)
 
 const NoteHome = resolve => require(['@/components/note/NoteHome'], resolve)
 const NoteLeft = resolve => require(['@/components/note/NoteLeft'], resolve)
@@ -54,14 +57,6 @@ export default new Router({
   mode: 'history',
   base: '',
   routes: [
-    {
-      path: '/content/hello',
-      name: 'ArticleDetailContent',
-      component: ArticleDetailContent,
-      meta: {
-        keepAlive: false
-      }
-    },
     {
       path: '/article/write',
       name: 'ArticleWrite',
@@ -130,6 +125,10 @@ export default new Router({
         keepAlive: true,
         returnback: false
       }
+    }, {
+      path: '/mine/modify/:module',
+      name: 'EditInfo',
+      component: EditInfo
     }, {
       path: '/mine/edit',
       name: 'MineEdit',

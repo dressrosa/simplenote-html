@@ -138,7 +138,7 @@ export default {
         let src = e.target.result
         box.style.backgroundImage = 'url(' + src + ')'
         if (size > 1024 * 512) {
-          let mul = size / (1024 * 512) - 1
+          let mul = (1024 * 512) / size
           var img = new Image()
           img.src = e.target.result
           img.onload = () => {
@@ -204,9 +204,9 @@ export default {
     //
     compress: function (img, mul) {
       // 默认按比例压缩
-      let w = img.width / mul
-      let h = img.height / mul
-      let quality = 1
+      let w = img.width * mul
+      let h = img.height * mul
+      let quality = mul
       // 生成canvas
       let canvas = document.createElement('canvas')
       let ctx = canvas.getContext('2d')

@@ -15,7 +15,7 @@
         <div class="note_each">
           <!-- <div class="ar_content">
              <vue-showdown v-if="item.content != null" :markdown="item.content"/>
-          </div> -->
+          </div>-->
           <article_detail_content_view/>
           <div class="ar_time">
             <i class="fa fa-tint"></i>
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="part_up">
+      <div class="part_up" v-cloak>
         <div class="side_right">
           <div class="i_content red" style="color: #bfbfbf">
             <i class="fa fa-thumbs-o-up"></i>
@@ -122,6 +122,7 @@
       <textarea class="co_tt" placeholder="说说你的见解呗" rows="1" maxlength="50" name="co_tt"></textarea>
       <input class="co_btn" type="button" value="评论" @click="doComment()">
     </div>
+    <common_footer_view/>
   </div>
 </template>
 
@@ -130,5 +131,13 @@
 @import "../../assets/css/font-awesome/css/font-awesome.min.css";
 [v-cloak] {
   display: none !important;
+}
+.loading {
+  font-size: 20px;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  display: -webkit-flex;
 }
 </style>

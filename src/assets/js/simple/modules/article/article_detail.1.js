@@ -13,7 +13,7 @@ import { zoom } from '@/assets/js/other/pinchzoom'
 import 'highlight.js/styles/github.css'
 import Header from '@/components/Header'
 const ArticleDetailContent = resolve => {
-  require(['@/components/article/ArticleDetail_Content'], (component) => {
+  require(['@/components/article/ArticleDetailContent'], (component) => {
     resolve(component)
   })
 }

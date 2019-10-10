@@ -26,7 +26,8 @@ export default {
     return {
       // eslint-disable-next-line
       headForImg: imgHead,
-      item: {}
+      item: null,
+      loading: true
     }
   },
   activated: function () {
@@ -43,6 +44,7 @@ export default {
   },
   methods: {
     getArticleContent: function () {
+      current.loading = true
       let _token = ''
       let _userId = ''
       let _userInfo = JSON.parse(getItem('user'))
@@ -60,6 +62,7 @@ export default {
         }
       })
         .then(response => {
+          current.loading = false
           if (response.data.code !== 0) {
             window.location.href = '/common/404'
             return false

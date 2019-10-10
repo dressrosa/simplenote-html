@@ -11,18 +11,16 @@
     <div class="markdown-editor-box" style="margin-top:45px;">
       <div class="edit_title">
         <textarea
-          v-if="items != null"
           cols="1"
           row="1"
           maxlength="15"
           class="edit_title_input"
           id="editTitleInput"
-          :value="items.title"
+          :value="articleTitle"
         ></textarea>
       </div>
-      <link rel="stylesheet" href="/static/editor.md/css/editormd.min.css">
       <div id="markdown-editor">
-        <textarea style=""></textarea>
+        <mavon-editor ref="mymd" />
       </div>
     </div>
   </div>
@@ -75,7 +73,7 @@
   top: 0px;
   left: 0px;
   font-size: 15px;
-  overflow: hidden;
+  overflow: scroll;
 }
 .edit_title {
   width: 100%;
@@ -87,7 +85,7 @@
 .edit_title_input {
   width: 99%;
   color: #2a363b;
-  margin: 5px;
+  margin-top: 5px;
   margin-bottom: 0px;
   text-align: center;
   font-size: 20px;
@@ -101,7 +99,17 @@
   border: 0px;
 }
 .markdown-editor-box {
-  height: 80%;
+  height: 100%;
+  width: 100%;
+}
+/* .markdown-body {
+  height: 100%;
+  min-height: 500px;
+  width: 100%;
+} */
+#markdown-editor {
+  height: 100%;
+  min-height: 400px;
   width: 100%;
 }
 </style>

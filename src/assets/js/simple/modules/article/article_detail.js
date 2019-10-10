@@ -5,6 +5,7 @@ import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 const ArticleDetailContent = resolve => require(['@/components/article/ArticleDetailContent'], resolve)
 Vue.use(VueAxios, axios)
 var current
@@ -13,6 +14,7 @@ export default {
   template: '<ArticleDetail/>',
   components: {
     common_header_view: Header,
+    common_footer_view: Footer,
     article_detail_content_view: ArticleDetailContent
   },
   // eslint-disable-next-line
@@ -21,6 +23,7 @@ export default {
       // eslint-disable-next-line
       headForImg: imgHead,
       item: {},
+      loading: true,
       commentsItems: null
     }
   },
@@ -53,10 +56,11 @@ export default {
     current.getNewComments()
   },
   mounted: function () {
-    // current.onCompleted()
+    current.onCompleted()
   },
   methods: {
     getArticleDetail: function () {
+      current.loading = true
       let _token = ''
       let _userId = ''
       let _userInfo = JSON.parse(getItem('user'))
@@ -74,6 +78,7 @@ export default {
         }
       })
         .then(response => {
+          current.loading = false
           if (response.data.code !== 0) {
             window.location.href = '/common/404'
             return false

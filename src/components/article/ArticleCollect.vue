@@ -1,6 +1,6 @@
 <template>
   <div>
-    <common_header_view/>
+    <common_header_view />
     <div class="list-group">
       <div
         class="collect_list_item"
@@ -34,7 +34,6 @@
 </template>
 <script src="@/assets/js/simple/modules/article/article_collect.js"></script>
 <style scoped>
-@import "../../assets/css/simple_mobile.css";
 .full_body {
   position: fixed;
   height: 100%;

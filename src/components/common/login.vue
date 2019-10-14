@@ -1,5 +1,10 @@
 <template>
   <div class="full_body">
+    <div class="common_header">
+      <div class="header_arrow" @click="goBack()">
+        <i class="fa fa-angle-left"></i>
+      </div>
+    </div>
     <div class="login_main">
       <div class="login_panel">
         <form id="xyForm" role="form" action="#" method="post" class="panel_form loginform">
@@ -12,7 +17,7 @@
             id="loginName"
             maxlength="20"
             autocomplete="off"
-          >
+          />
           <div class="eye_input">
             <input
               class="login_input pwd"
@@ -23,14 +28,14 @@
               id="password"
               maxlength="20"
               autocomplete="off"
-            >
+            />
             <label class="addon fa fa-eye" @click="showPwd($event)"></label>
           </div>
           <ul class="list-group">
-            <input type="button" value="登录" class="xbtn logining" @click="doLogin()">
+            <!-- <input type="button" value="登录" class="xbtn logining" @click="doLogin()" />
             <div class="change_a">
               <a class="change goregister">注册</a>
-            </div>
+            </div>-->
             <span class="tooltip"></span>
           </ul>
         </form>
@@ -51,7 +56,7 @@
             id="loginName1"
             maxlength="20"
             autocomplete="off"
-          >
+          />
           <div class="eye_input">
             <input
               class="login_input pwd"
@@ -62,7 +67,7 @@
               id="password1"
               maxlength="20"
               autocomplete="off"
-            >
+            />
             <label class="addon icon-eye" @click="showPwd($event)"></label>
           </div>
           <input
@@ -74,9 +79,9 @@
             id="repassword"
             maxlength="20"
             autocomplete="off"
-          >
+          />
           <ul class="list-group">
-            <input type="button" value="注册" class="xbtn registering">
+            <input type="button" value="注册" class="xbtn registering" />
             <div class="change_a">
               <a class="change gologin">登录</a>
             </div>
@@ -90,7 +95,7 @@
       <!--  <div class="hr1-line" style="margin-bottom: 10px"></div> -->
       <div class="copyright" style="float: left; margin-right: 3px;">
         <font style="margin-right: 3px;">©2016-2018</font>
-        <a href="html/xiaoyu.me.html">xiaoyu.me</a>
+        <a href>xiaoyu.me</a>
       </div>
     </div>
   </div>
@@ -98,8 +103,6 @@
 
 <script src="@/assets/js/simple/modules/user/login.js"></script>
 <style scoped>
-@import "../../assets/css/simple_mobile.css";
-@import "../../assets/css/font-awesome/css/font-awesome.min.css";
 button {
   cursor: pointer;
   -webkit-appearance: none;
@@ -111,22 +114,47 @@ button {
   top: 0px;
   left: 0px;
   font-family: "Lato", "PingFang SC", "Microsoft YaHei", sans-serif;
-  font-size: 15px;
-  line-height: 25px;
+  font-size: 17px;
+  line-height: 30px;
   overflow: hidden;
   background-image: url("../../assets/img/book_allname.png");
   background-size: cover;
   background-attachment: fixed;
   position: fixed;
 }
+.common_header {
+  position: fixed;
+  display: flex;
+  top: 0px;
+  left: 0px;
+  height: 45px;
+  width: 100%;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 99;
+  white-space: nowrap;
+  margin-bottom: 1px;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.header_arrow {
+  position: absolute;
+  left: 5px;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  font-size: 2em;
+  color: #8f8f8f;
+}
 .login_main {
   position: fixed;
-  bottom: 45%;
+  bottom: 30%;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 50%;
+  height: 45%;
   background-color: rgba(255, 255, 255, 0.51);
 }
 
@@ -134,7 +162,7 @@ button {
   margin: 3px;
   padding: 5px;
   border: 0px;
-  height: 35px;
+  height: 45px;
   width: 304px;
   max-width: 420px;
   background: rgba(255, 255, 255, 0);

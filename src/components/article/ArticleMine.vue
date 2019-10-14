@@ -68,8 +68,6 @@
 </template>
 <script src="@/assets/js/simple/modules/article/article_mine.js"></script>
 <style scoped>
-@import "../../assets/css/simple_mobile.css";
-@import "../../assets/css/font-awesome/css/font-awesome.min.css";
 .common_header {
   position: fixed;
   display: flex;

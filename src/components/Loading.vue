@@ -5,7 +5,6 @@
 </template>
 
 <style scoped>
-@import "../assets/css/font-awesome/css/font-awesome.min.css";
 .loading {
   font-size: 20px;
   -webkit-align-items: center;

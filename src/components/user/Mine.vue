@@ -105,8 +105,6 @@
 </template>
 <script src="@/assets/js/simple/modules/user/mine.js"></script>
 <style scoped>
-@import "../../assets/css/simple_mobile.css";
-@import "../../assets/css/font-awesome/css/font-awesome.min.css";
 [v-cloak] {
   display: none !important;
 }

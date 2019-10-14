@@ -63,6 +63,7 @@ export default {
       })
         .then(response => {
           current.loading = false
+          current.stopParentLoading()
           if (response.data.code !== 0) {
             window.location.href = '/common/404'
             return false
@@ -115,6 +116,9 @@ export default {
           hljs.highlightBlock(block)
         })
       })
+    },
+    stopParentLoading: () => {
+      current.$emit('func', false)
     },
     //
     onCompleted: function () {

@@ -7,6 +7,18 @@ import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 const ArticleDetailContent = resolve => require(['@/components/article/ArticleDetailContent'], resolve)
+// const ArticleDetailContent = () => ({
+//   // 需要加载的组件 (应该是一个 `Promise` 对象)
+//   component: import('@/components/article/ArticleDetailContent'),
+//   // 异步组件加载时使用的组件
+//   loading: LoadingComponent,
+//   // 展示加载时组件的延时时间。默认值是 200 (毫秒)
+//   delay: 200,
+//   // 如果提供了超时时间且组件加载也超时了，
+//   // 则使用加载失败时使用的组件。默认值是：`Infinity`
+//   timeout: 3000
+// })
+// import ArticleDetailContent from '@/components/article/ArticleDetailContent'
 Vue.use(VueAxios, axios)
 var current
 export default {
@@ -60,7 +72,6 @@ export default {
   },
   methods: {
     getArticleDetail: function () {
-      current.loading = true
       let _token = ''
       let _userId = ''
       let _userInfo = JSON.parse(getItem('user'))
@@ -78,7 +89,6 @@ export default {
         }
       })
         .then(response => {
-          current.loading = false
           if (response.data.code !== 0) {
             window.location.href = '/common/404'
             return false
@@ -192,6 +202,9 @@ export default {
         $('.co_btn').removeAttr('disabled')
         console.log(error)
       })
+    },
+    stopLoading: () => {
+      current.loading = false
     },
     onCompleted: function () {
     }

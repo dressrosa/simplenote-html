@@ -22,8 +22,6 @@
 </template>
 <script src="@/assets/js/simple/modules/user/edit_info.js"></script>
 <style scoped>
-@import "../../assets/css/simple_mobile.css";
-@import "../../assets/css/font-awesome/css/font-awesome.min.css";
 .full_body {
   position: fixed;
   height: 100%;

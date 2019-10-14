@@ -17,3 +17,7 @@ export default {
   components: {}
 }
 </script>
+<style>
+@import "assets/css/simple_mobile.css";
+@import "assets/css/font-awesome/css/font-awesome.min.css";
+</style>

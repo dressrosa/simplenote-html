@@ -88,8 +88,6 @@
 </template>
 <script src="@/assets/js/simple/modules/note/note_mine.js"></script>
 <style scoped>
-@import "../../assets/css/simple_mobile.css";
-@import "../../assets/css/font-awesome/css/font-awesome.min.css";
 .note_list {
   display: list-item;
   -ms-flex-align: center;

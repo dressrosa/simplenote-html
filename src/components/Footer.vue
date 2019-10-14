@@ -42,11 +42,7 @@
 </template>
 
 <script src="@/assets/js/simple/footer.js"></script>
-<style>
-@import "../assets/css/simple_mobile.css";
-</style>
 <style scoped>
-@import "../assets/css/font-awesome/css/font-awesome.min.css";
 .footer_modules {
   display: flex;
   width: 100%;

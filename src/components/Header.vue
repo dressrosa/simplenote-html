@@ -44,11 +44,7 @@
 // }
 </script>
 <script src="@/assets/js/simple/header.js"></script>
-<style>
-@import "../assets/css/simple_mobile.css";
-</style>
 <style scoped>
-@import "../assets/css/font-awesome/css/font-awesome.min.css";
 .common_header {
   position: fixed;
   display: flex;

@@ -1,6 +1,6 @@
 <template>
   <div v-cloak>
-    <common_header_view/>
+    <common_header_view />
     <div
       class="container main article"
       style="position: absolute; overflow-y: scroll; -webkit-overflow-scrolling: touch;"
@@ -13,10 +13,9 @@
           <span v-if="item.attr==null" class="ar_view">浏览量:0</span>
         </div>
         <div class="note_each">
-          <!-- <div class="ar_content">
-             <vue-showdown v-if="item.content != null" :markdown="item.content"/>
-          </div>-->
-          <article_detail_content_view/>
+          <i v-if="loading == true" class="loading fa fa-spinner fa-pulse"></i>
+          <!--  监听子组件传回的加载完成信息 -->
+          <article_detail_content_view @func="stopLoading" />
           <div class="ar_time">
             <i class="fa fa-tint"></i>
             <label v-html="item.createTime"></label>
@@ -50,13 +49,13 @@
               img-type="avatar"
               :src="headForImg+item.user.avatar"
               :onerror="headForImg"
-            >
+            />
             <img
               v-if="item.user==null"
               class="avatar"
               img-type="avatar"
               src="../../assets/img/default.png"
-            >
+            />
             <div class="p_username">
               <label
                 v-if="item.user!=null"
@@ -82,7 +81,7 @@
           >
             <div class="item_up">
               <div>
-                <img img-type="avatar " class="avatar tiny" :src="headForImg+coItem.replyerAvatar">
+                <img img-type="avatar " class="avatar tiny" :src="headForImg+coItem.replyerAvatar" />
               </div>
               <div class="item_p">
                 <label class="item_p_username">
@@ -120,15 +119,14 @@
     </div>
     <div class="part_comment">
       <textarea class="co_tt" placeholder="说说你的见解呗" rows="1" maxlength="50" name="co_tt"></textarea>
-      <input class="co_btn" type="button" value="评论" @click="doComment()">
+      <input class="co_btn" type="button" value="评论" @click="doComment()" />
     </div>
-    <common_footer_view/>
+    <common_footer_view />
   </div>
 </template>
 
 <script src="@/assets/js/simple/modules/article/article_detail.js"></script>
 <style scoped>
-@import "../../assets/css/font-awesome/css/font-awesome.min.css";
 [v-cloak] {
   display: none !important;
 }

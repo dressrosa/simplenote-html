@@ -70,7 +70,6 @@
 </template>
 <script src="@/assets/js/simple/modules/user/mine_following.js"></script>
 <style scoped>
-@import "../../assets/css/simple_mobile.css";
 .full_body {
   position: fixed;
   height: 100%;

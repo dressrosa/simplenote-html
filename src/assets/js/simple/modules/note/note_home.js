@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull, unbindScroll } from '@/assets/js/simple/common'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
 // eslint-disable-next-line
@@ -63,7 +62,7 @@ export default {
     // current.getNotes(1, _pageSize)
   },
   destroyed: function () {
-    $(window).unbind('scroll')
+    unbindScroll()
   },
   mounted: function () {
     current.onCompleted()
@@ -171,9 +170,8 @@ export default {
     },
     //
     bindScroll: function () {
-      $(function () {
-        // object.addEventListener("scroll", myScript);
-        $(window).scroll(() => {
+      window.onload = () => {
+        window.onscroll = () => {
           let loading = document.getElementsByClassName('loading')[0]
           if (getScrollTop() + getClientHeight() === getScrollHeight()) {
             if (!_lock) {
@@ -185,8 +183,8 @@ export default {
               }, 50)
             }
           }
-        })
-      })
+        }
+      }
     },
     refesh: function () {
       current.items = []

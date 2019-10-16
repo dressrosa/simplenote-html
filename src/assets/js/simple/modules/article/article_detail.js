@@ -1,24 +1,11 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 const ArticleDetailContent = resolve => require(['@/components/article/ArticleDetailContent'], resolve)
-// const ArticleDetailContent = () => ({
-//   // 需要加载的组件 (应该是一个 `Promise` 对象)
-//   component: import('@/components/article/ArticleDetailContent'),
-//   // 异步组件加载时使用的组件
-//   loading: LoadingComponent,
-//   // 展示加载时组件的延时时间。默认值是 200 (毫秒)
-//   delay: 200,
-//   // 如果提供了超时时间且组件加载也超时了，
-//   // 则使用加载失败时使用的组件。默认值是：`Infinity`
-//   timeout: 3000
-// })
-// import ArticleDetailContent from '@/components/article/ArticleDetailContent'
 Vue.use(VueAxios, axios)
 var current
 export default {
@@ -71,7 +58,7 @@ export default {
     current.onCompleted()
   },
   methods: {
-    getArticleDetail: function () {
+    getArticleDetail: () => {
       let _token = ''
       let _userId = ''
       let _userInfo = JSON.parse(getItem('user'))
@@ -79,7 +66,7 @@ export default {
         _token = _userInfo.token
         _userId = _userInfo.userId
       }
-      let _articleId = this.$route.params.articleId
+      let _articleId = current.$route.params.articleId
       Vue.axios.get('/api/v1/article/' + _articleId, {
         headers: {
           token: _token,
@@ -140,31 +127,32 @@ export default {
         })
     },
     //
-    getAllComments: function () {
-      let _articleId = this.$route.params.articleId
-      this.$router.push({ path: '/article/' + _articleId + '/comments' })
+    getAllComments: () => {
+      let _articleId = current.$route.params.articleId
+      current.$router.push({ path: '/article/' + _articleId + '/comments' })
     },
     //
-    doComment: function () {
+    doComment: () => {
       let _token = ''
       let _userId = ''
-      $(function () {
-        let _userInfo = $.parseJSON(getItem('user'))
-        if (!checkNull(_userInfo)) {
-          _token = _userInfo.token
-          _userId = _userInfo.userId
-        }
-      })
-      let _text = $('textarea[name=co_tt]').val()
+      let _userInfo = JSON.parse(getItem('user'))
+      if (!checkNull(_userInfo)) {
+        _token = _userInfo.token
+        _userId = _userInfo.userId
+      }
+
+      // let _text = $('textarea[name=co_tt]').val()
+      let _text = document.getElementsByName('co_tt')[0].value
       if (checkNull(_text)) {
-        this.$toast.bottom('评论不能为空')
+        current.$toast.bottom('评论不能为空')
         return false
       }
       if (_text.length > 100) {
-        this.$toast.bottom('评论过长')
+        current.$toast.bottom('评论过长')
         return false
       }
-      $('.co_btn').attr('disabled', 'disabled')
+      let cobtn = document.getElementsByClassName('co_btn')[0]
+      cobtn.setAttribute('disabled', 'disabled')
       let _articleId = this.$route.params.articleId
 
       Vue.axios({
@@ -180,26 +168,26 @@ export default {
       }).then(response => {
         let obj = response.data
         if (obj.code === 20001) {
-          this.$toast.bottom('请先登录')
+          current.$toast.bottom('请先登录')
           removeItem('user')
-          $('.co_btn').removeAttr('disabled')
+          cobtn.removeAttribute('disabled')
           return false
         }
         if (obj.code === 0) {
-          this.$toast.bottom('评论成功')
-          $('.co_tt').val('')
+          current.$toast.bottom('评论成功')
+          cobtn.value = ''
           if (current.commentsItems == null) {
             current.commentsItems = []
           }
           current.commentsItems.unshift(obj.data)
         } else if (obj.code === 20001) {
-          this.$toast.bottom('请先登录')
+          current.$toast.bottom('请先登录')
           removeItem('user')
         }
-        $('.co_btn').removeAttr('disabled')
+        cobtn.removeAttribute('disabled')
         return true
       }).catch(error => {
-        $('.co_btn').removeAttr('disabled')
+        cobtn.removeAttribute('disabled')
         console.log(error)
       })
     },

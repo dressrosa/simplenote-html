@@ -49,7 +49,8 @@ export function getDevice() {
 }
 //
 export function unbindScroll() {
-    $(window).unbind('scroll')
+    // $(window).unbind('scroll')
+    window.onscroll = () => { }
 }
 // tool function
 

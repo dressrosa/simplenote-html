@@ -32,10 +32,10 @@
             <label class="addon fa fa-eye" @click="showPwd($event)"></label>
           </div>
           <ul class="list-group">
-            <!-- <input type="button" value="登录" class="xbtn logining" @click="doLogin()" />
+            <input type="button" value="登录" class="xbtn logining" @click="doLogin()" />
             <div class="change_a">
-              <a class="change goregister">注册</a>
-            </div>-->
+              <!-- <a class="change goregister">注册</a> -->
+            </div>
             <span class="tooltip"></span>
           </ul>
         </form>

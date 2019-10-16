@@ -33,7 +33,7 @@ export default {
     current = this
     let _userInfo = JSON.parse(getItem('user'))
     if (checkNull(_userInfo)) {
-      this.$toast.bottom('请先登录')
+      current.$toast.bottom('请先登录')
       return
     }
     current.item = this.$route.params.module
@@ -52,7 +52,7 @@ export default {
       let _token = ''
       let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
-        this.$toast.bottom('请先登录')
+        current.$toast.bottom('请先登录')
         return false
       }
       _token = _userInfo.token
@@ -61,7 +61,7 @@ export default {
       let mo = this.$route.params.module
 
       if (checkNull(content)) {
-        this.$toast.bottom('不能为空')
+        current.$toast.bottom('不能为空')
         return false
       }
       _lock = true

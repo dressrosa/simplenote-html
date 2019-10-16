@@ -2,10 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import router from '@/router'
 import VueAxios from 'vue-axios'
-// eslint-disable-next-line
-import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
-// eslint-disable-next-line
 import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
@@ -100,11 +97,11 @@ export default {
       let _content = current.getMdContent()
       let _title = current.getTitle()
       if (checkNull(_title)) {
-        this.$toast.bottom('标题不能为空')
+        current.$toast.bottom('标题不能为空')
         return false
       }
       if (checkNull(_content)) {
-        this.$toast.bottom('内容不能为空')
+        current.$toast.bottom('内容不能为空')
         return false
       }
       current.doRefreshButton()

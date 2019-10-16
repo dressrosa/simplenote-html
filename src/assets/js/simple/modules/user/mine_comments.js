@@ -135,7 +135,7 @@ export default {
           $('#' + commentId).fadeOut(500, () => {
             $(this).css({ 'display': 'none' })
           })
-          this.$toast.bottom('删除成功')
+          current.$toast.bottom('删除成功')
         }
       }).catch(err => {
         if (err === 'cancel') {

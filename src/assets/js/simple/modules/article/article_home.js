@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull, unbindScroll } from '@/assets/js/simple/common'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
 // eslint-disable-next-line
@@ -42,12 +41,13 @@ export default {
       let _scrollTop = getItem(vm.$route.name)
       if (!checkNull(_scrollTop)) {
         document.body.scrollTop = _scrollTop
+        document.documentElement.scrollTop = _scrollTop
       }
     })
   },
   beforeRouteLeave: function (to, from, next) {
     let _scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-    setItem(this.$route.name, _scrollTop)
+    setItem(current.$route.name, _scrollTop)
     to.meta.returnback = false
     unbindScroll()
     next()
@@ -57,12 +57,13 @@ export default {
     current.getHotList(1, _pageSize)
   },
   destroyed: function () {
+    unbindScroll()
   },
   mounted: function () {
     current.onCompleted()
   },
   methods: {
-    getHotList: function (_pageNum, _pageSize) {
+    getHotList: (_pageNum, _pageSize) => {
       let _token = ''
       let _userId = ''
       let _userInfo = JSON.parse(getItem('user'))
@@ -105,35 +106,35 @@ export default {
           console.log(error)
         })
     },
-    itemClick: function (event) {
+    itemClick: event => {
       let _articleId = event.currentTarget.id
-      this.$router.push({ path: '/article/' + _articleId })
+      current.$router.push({ path: '/article/' + _articleId })
     },
-    avatarClick: function (event) {
+    avatarClick: event => {
       let _userId = event.currentTarget.id
       window.location.href = '/user/' + _userId
     },
-    heartClick: function (event) {
+    heartClick: event => {
       let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
-        this.$toast.bottom('请先登录')
+        current.$toast.bottom('请先登录')
         removeItem('user')
         return false
       }
       let _cur = event.currentTarget
-      let _articleId = event.currentTarget.getAttribute('article-id')
-      let $next = $(_cur).next()
-      let num = $next.html()
+      let _articleId = _cur.getAttribute('article-id')
+      let $next = _cur.nextElementSibling
+      let num = $next.innerHTML
       let _isCollect
-      if (event.currentTarget.getAttribute('data-heart') === '0') {
-        $(_cur).css('color', '#fd4d4d')
-        $(_cur).attr('data-heart', '1')
-        $next.html(num - (-1))
+      if (_cur.getAttribute('data-heart') === '0') {
+        _cur.setAttribute('data-heart', '1')
+        _cur.style.color = '#fd4d4d'
+        $next.innerHTML = num - (-1)
         _isCollect = 0
-      } else if ($(_cur).attr('data-heart') === '1') {
-        $(_cur).css('color', '#a7a7a7')
-        $(_cur).attr('data-heart', '0')
-        $next.html(num - 1)
+      } else if (_cur.getAttribute('data-heart') === '1') {
+        _cur.style.color = '#a7a7a7'
+        _cur.setAttribute('data-heart', '0')
+        $next.innerHTML = num - 1
         _isCollect = 1
       }
       let _token = ''
@@ -156,7 +157,7 @@ export default {
       }).then(response => {
         let obj = response.data
         if (obj.code === '20001') {
-          this.$toast.bottom('请先登录')
+          current.$toast.bottom('请先登录')
           removeItem('user')
           return false
         }
@@ -165,25 +166,26 @@ export default {
         console.log(error)
       })
     },
-    commentClick: function (event) {
+    commentClick: event => {
       let _articleId = event.currentTarget.getAttribute('article-id')
-      this.$router.push({ path: '/article/' + _articleId + '/comments' })
+      current.$router.push({ path: '/article/' + _articleId + '/comments' })
     },
-    likeClick: function (event) {
+    likeClick: event => {
       let _cur = event.currentTarget
       let _articleId = _cur.getAttribute('article-id')
-      let $next = $(_cur).next()
-      let num = $next.html()
+      let $next = _cur.nextElementSibling
+      let num = $next.innerHTML
       let _isLike
-      if ($(_cur).attr('data-like') === '0') {
-        $(_cur).css('color', '#fd4d4d')
-        $(_cur).attr('data-like', '1')
-        $next.html(num - (-1))
+      let dl = _cur.getAttribute('data-like')
+      if (dl === '0') {
+        _cur.style.color = '#fd4d4d'
+        _cur.setAttribute('data-like', '1')
+        $next.innerHTML = (num - (-1))
         _isLike = 0
-      } else if ($(_cur).attr('data-like') === '1') {
-        $(_cur).css('color', '#a7a7a7')
-        $(_cur).attr('data-like', '0')
-        $next.html(num - 1)
+      } else if (dl === '1') {
+        _cur.style.color = '#a7a7a7'
+        _cur.setAttribute('data-like', '0')
+        $next.innerHTML = (num - 1)
         _isLike = 1
       }
       let _token = ''
@@ -213,7 +215,7 @@ export default {
         console.log(error)
       })
     },
-    toTransparentHeader: function () {
+    toTransparentHeader: () => {
       let n1 = document.getElementById('top_n1_info')
       if (n1.style.opacity !== 1) {
         n1.style.opacity = 1
@@ -222,7 +224,7 @@ export default {
         ha.style.background = 'rgba(255, 255, 255, 0)'
       }
     },
-    toCommonHeader: function (op) {
+    toCommonHeader: op => {
       let n1 = document.getElementById('top_n1_info')
       if (n1.style.opacity === '1') {
         let ha = document.getElementsByClassName('common_header')[0]
@@ -232,28 +234,28 @@ export default {
       }
     },
     //
-    bindScroll: function () {
-      $(function () {
-        $(window).scroll(function () {
-          let _top = document.documentElement.scrollTop
-          if (_top > 300) {
-            current.toTransparentHeader()
-          } else {
-            current.toCommonHeader(1 - _top / 300.0)
-          }
+    bindScroll: () => {
+      window.onload = () => {
+        window.onscroll = () => {
+          // let _top = document.documentElement.scrollTop
+          // if (_top > 300) {
+          //   current.toTransparentHeader()
+          // } else {
+          //   current.toCommonHeader(1 - _top / 300.0)
+          // }
           let loading = document.getElementsByClassName('loading')[0]
           if (getScrollTop() + getClientHeight() === getScrollHeight()) {
             if (!_lock) {
               _lock = true
               loading.style.visibility = 'visible'
-              setTimeout(function () {
+              setTimeout(() => {
                 current.getHotList(++_pageNum, _pageSize)
                 loading.style.visibility = 'hidden'
               }, 50)
             }
           }
-        })
-      })
+        }
+      }
     },
     //
     onCompleted: function () {

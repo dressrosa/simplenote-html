@@ -84,7 +84,7 @@ export default {
     goNotes: function () {
       let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
-        this.$toast.bottom('请先登录')
+        current.$toast.bottom('请先登录')
         return
       }
       this.$router.push({ path: '/mine/notes' })
@@ -92,7 +92,7 @@ export default {
     goArticles: function () {
       let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
-        this.$toast.bottom('请先登录')
+        current.$toast.bottom('请先登录')
         return
       }
       this.$router.push({ path: '/mine/articles' })
@@ -100,7 +100,7 @@ export default {
     goCollects: function () {
       let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
-        this.$toast.bottom('请先登录')
+        current.$toast.bottom('请先登录')
         return
       }
       this.$router.push({ path: '/mine/collects/articles' })
@@ -108,7 +108,7 @@ export default {
     goFollowing: function () {
       let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
-        this.$toast.bottom('请先登录')
+        current.$toast.bottom('请先登录')
         return
       }
       this.$router.push({ path: '/mine/following' })
@@ -116,7 +116,7 @@ export default {
     goComments: function () {
       let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
-        this.$toast.bottom('请先登录')
+        current.$toast.bottom('请先登录')
         return
       }
       this.$router.push({ path: '/mine/comments' })
@@ -124,7 +124,7 @@ export default {
     goEdit: function () {
       let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
-        this.$toast.bottom('请先登录')
+        current.$toast.bottom('请先登录')
         return
       }
       this.$router.push({ path: '/mine/edit' })

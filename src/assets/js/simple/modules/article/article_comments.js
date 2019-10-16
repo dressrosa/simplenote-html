@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
-// eslint-disable-next-line
 import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
@@ -125,16 +123,18 @@ export default {
         _token = _userInfo.token
         _userId = _userInfo.userId
       }
-      let _text = $('textarea[name=co_tt]').val()
+
+      let _text = document.getElementsByName('co_tt')[0].value
       if (checkNull(_text)) {
-        this.$toast.bottom('评论不能为空')
+        current.$toast.bottom('评论不能为空')
         return false
       }
       if (_text.length > 100) {
-        this.$toast.bottom('评论过长')
+        current.$toast.bottom('评论过长')
         return false
       }
-      $('.co_btn').attr('disabled', 'disabled')
+      let cobtn = document.getElementsByClassName('co_btn')[0]
+      cobtn.setAttribute('disabled', 'disabled')
       let _articleId = this.$route.params.articleId
 
       Vue.axios({
@@ -149,43 +149,45 @@ export default {
         }
       }).then(response => {
         let obj = response.data
+        let cobtn = document.getElementsByClassName('co_btn')[0]
         if (obj.code === 20001) {
-          this.$toast.bottom('请先登录')
+          current.$toast.bottom('请先登录')
           removeItem('user')
-          $('.co_btn').removeAttr('disabled')
+          cobtn.removeAttribute('disabled')
           return false
         }
         if (obj.code === 0) {
-          this.$toast.bottom('评论成功')
-          $('.co_tt').val('')
+          current.$toast.bottom('评论成功')
+          cobtn.value = ''
           current.count = current.count + 1
           if (current.items == null) {
             current.items = []
           }
           current.items.push(obj.data)
         } else if (obj.code === 20001) {
-          this.$toast.bottom('请先登录')
+          current.$toast.bottom('请先登录')
           removeItem('user')
         }
-        $('.co_btn').removeAttr('disabled')
+        cobtn.removeAttribute('disabled')
         return true
       }).catch(error => {
-        $('.co_btn').removeAttr('disabled')
+        let cobtn = document.getElementsByClassName('co_btn')[0]
+        cobtn.removeAttribute('disabled')
         console.log(error)
       })
     },
     //
     doLoad: function () {
       let _top = document.documentElement.scrollTop
-      console.log('top:' + _top)
       if (_top === 0) {
         if (!_lock) {
           _lock = true
-          $('.loading').css('display', 'block')
+          let loading = document.getElementsByClassName('loading')[0]
+          loading.style.display = 'block'
           setTimeout(function () {
             current.getComments(++_pageNum, _pageSize)
             console.log('pageNum:' + _pageNum)
-            $('.loading').css('display', 'none')
+            loading.style.display = 'none'
           }, 50)
         }
       }

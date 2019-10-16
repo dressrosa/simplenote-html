@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull } from '@/assets/js/simple/common'
 import VueShowdown from 'vue-showdown'
-import hljs from 'highlight.js'
-// eslint-disable-next-line
-import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
-import { zoom } from '@/assets/js/other/pinchzoom'
+// import hljs from 'highlight.js'
+import { getItem } from '@/assets/js/simple/localstored'
 import 'highlight.js/styles/github.css'
+import preview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
+Vue.use(preview)
 Vue.use(VueAxios, axios)
 Vue.use(VueShowdown, {
   options: {
@@ -43,7 +43,7 @@ export default {
     // current.onCompleted()
   },
   methods: {
-    getArticleContent: function () {
+    getArticleContent: () => {
       current.loading = true
       let _token = ''
       let _userId = ''
@@ -52,7 +52,7 @@ export default {
         _token = _userInfo.token
         _userId = _userInfo.userId
       }
-      let _articleId = this.$route.params.articleId
+      let _articleId = current.$route.params.articleId
       Vue.axios.get('/api/v1/article/content/' + _articleId, {
         headers: {
           token: _token,
@@ -74,8 +74,8 @@ export default {
             return false
           }
           current.item = ar
-          current.$nextTick(function () {
-            current.pinch()
+          current.$nextTick(() => {
+            current.preHandle()
           })
           return true
         })
@@ -84,44 +84,23 @@ export default {
           console.log(error)
         })
     },
-    pinch: function () {
-      $(function () {
-        $('.ar_content').find('img').each(function (i) {
-          let _this = $(this)
-          _this.attr('width', '100%')
-          let src = _this.attr('src')
-          _this.bind('click', function () {
-            let t = $('#bigImgdiv')
-            let c = $('#bigimg').attr('src')
-            if (c === undefined || c === 'undefined') {
-              $('<div id="bigImgdiv" style="position: fixed;z-index: 1000;top: 0;left: 0;' +
-                '-webkit-user-drag: none;-moz-user-drag: none;-ms-user-drag: none;user-drag: none;' +
-                'width: 100%;height: 100%;background-color: rgba(255,255,255,0.9);display:none;">' +
-                '<img id="bigimg" style="height: 100%;width: 100%;border: 0;' +
-                'margin:0 auto;" src="' + src + '" /></div>')
-                .appendTo('body')
-              zoom('bigimg', {})
-            }
-            t = $('#bigImgdiv')
-            $('#bigimg').attr('src', src)
-            t.attr('display', 'block')
-            t.fadeIn('fast')
-            $('#bigImgdiv').click(function () {
-              $(this).attr('display', 'none')
-              $(this).fadeOut('fast')
-            })
-          })
-        })
-        $('pre code').each(function (i, block) {
-          hljs.highlightBlock(block)
-        })
+    preHandle: () => {
+      document.querySelectorAll('.ar_content img').forEach((img) => {
+        img.setAttribute('preview', 1)
+        img.setAttribute('preview-text', 'img')
+        img.setAttribute('width', '100%')
       })
+      document.querySelectorAll('pre code').forEach((block) => {
+        // hljs.highlightBlock(block)
+      })
+      // 图片是异步 所以需要重新刷新下才能使用放大
+      current.$previewRefresh()
     },
     stopParentLoading: () => {
       current.$emit('func', false)
     },
     //
-    onCompleted: function () {
+    onCompleted: () => {
     }
   }
 }

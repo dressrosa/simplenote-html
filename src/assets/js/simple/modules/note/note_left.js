@@ -50,14 +50,14 @@ export default {
       let _token = ''
       let _userInfo = JSON.parse(getItem('user'))
       if (checkNull(_userInfo)) {
-        this.$toast.bottom('请先登录')
+        current.$toast.bottom('请先登录')
         return false
       }
       _token = _userInfo.token
       _userId = _userInfo.userId
       let content = document.getElementById('noteContent').value
       if (checkNull(content)) {
-        this.$toast.bottom('总得有点内容')
+        current.$toast.bottom('总得有点内容')
         return false
       }
       _lock = true
@@ -89,10 +89,10 @@ export default {
           current.changePlaneColor(false)
           let code = response.data.code
           if (code === 20001) {
-            this.$toast.bottom('请先登录')
+            current.$toast.bottom('请先登录')
             return false
           } else if (code !== 0) {
-            this.$toast.bottom('发表失败')
+            current.$toast.bottom('发表失败')
             return false
           }
           current.goBack()
@@ -101,7 +101,7 @@ export default {
         .catch(error => {
           _lock = false
           current.changePlaneColor(false)
-          this.$toast.bottom('网络太差了')
+          current.$toast.bottom('网络太差了')
           console.log(error)
         })
     },
@@ -123,7 +123,7 @@ export default {
     preview: function (event) {
       console.log(1)
       if (!window.FileReader) { // html5方案
-        this.$toast.bottom('您的设备暂不支持上传图片')
+        current.$toast.bottom('您的设备暂不支持上传图片')
         return false
       }
       let _file = event.currentTarget

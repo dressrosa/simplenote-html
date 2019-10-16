@@ -35,7 +35,7 @@ export default {
     current = this
     let _userInfo = JSON.parse(getItem('user'))
     if (checkNull(_userInfo)) {
-      this.$toast.bottom('请先登录')
+      current.$toast.bottom('请先登录')
       return
     }
     current.item = _userInfo
@@ -53,7 +53,7 @@ export default {
     preview: function (event) {
       console.log(1)
       if (!window.FileReader) { // html5方案
-        this.$toast.bottom('您的设备暂不支持上传图片')
+        current.$toast.bottom('您的设备暂不支持上传图片')
         return false
       }
       let _file = event.currentTarget

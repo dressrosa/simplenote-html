@@ -60,7 +60,7 @@ export default {
             num = 0
           }
         }
-        this.$toast.bottom(_tip)
+        current.$toast.bottom(_tip)
         num++
         return
       }
@@ -78,12 +78,12 @@ export default {
         .then(response => {
           _lock = false
           if (response.data.code !== 0) {
-            this.$toast.bottom('登录失败')
+            current.$toast.bottom('登录失败')
             return false
           }
           let _ret = response.data.data
           if (checkNull(_ret)) {
-            this.$toast.bottom('登录失败')
+            current.$toast.bottom('登录失败')
             return false
           }
           // save the login info

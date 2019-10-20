@@ -3,7 +3,6 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { checkNull, unbindScroll } from '@/assets/js/simple/common'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
-// eslint-disable-next-line
 import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
@@ -64,6 +63,7 @@ export default {
   },
   methods: {
     getHotList: (_pageNum, _pageSize) => {
+      _lock = true
       let _token = ''
       let _userId = ''
       let _userInfo = JSON.parse(getItem('user'))
@@ -83,6 +83,7 @@ export default {
         }
       })
         .then(response => {
+          _lock = false
           // then 指成功之后的回调 (注意：使用箭头函数，可以不考虑this指向)
           if (response.data.code !== 0) {
             return false
@@ -99,10 +100,10 @@ export default {
             })
           }
           //  current.$forceUpdate()
-          _lock = false
         })
         .catch(error => {
           // catch 指请求出错的处理
+          _lock = false
           console.log(error)
         })
     },
@@ -244,7 +245,8 @@ export default {
           //   current.toCommonHeader(1 - _top / 300.0)
           // }
           let loading = document.getElementsByClassName('loading')[0]
-          if (getScrollTop() + getClientHeight() === getScrollHeight()) {
+          console.log((getScrollTop() + getClientHeight()) + '=' + getScrollHeight())
+          if (getScrollTop() + getClientHeight() >= getScrollHeight()) {
             if (!_lock) {
               _lock = true
               loading.style.visibility = 'visible'

@@ -87,6 +87,7 @@ export default {
         }
       })
         .then(response => {
+          _lock = false
           // then 指成功之后的回调 (注意：使用箭头函数，可以不考虑this指向)
           if (response.data.code !== 0) {
             return false
@@ -102,9 +103,9 @@ export default {
           _ret.forEach(v => {
             current.items.unshift(v)
           })
-          _lock = false
         })
         .catch(error => {
+          _lock = false
           // catch 指请求出错的处理
           console.log(error)
         })

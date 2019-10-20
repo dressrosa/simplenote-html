@@ -2,8 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { checkNull } from '@/assets/js/simple/common'
-// eslint-disable-next-line
-import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
+import { getItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 import Header from '@/components/Header'
@@ -16,7 +15,6 @@ Vue.use(Toast, {
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 var current
-var _lock = false
 export default {
   name: 'MineEdit',
   template: '<MineEdit/>',
@@ -51,7 +49,6 @@ export default {
     },
     //
     preview: function (event) {
-      console.log(1)
       if (!window.FileReader) { // html5方案
         current.$toast.bottom('您的设备暂不支持上传图片')
         return false

@@ -3,8 +3,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { checkNull, unbindScroll } from '@/assets/js/simple/common'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
-// eslint-disable-next-line
-import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
+import { getItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 Vue.use(Toast, {

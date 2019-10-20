@@ -2,8 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { checkNull } from '@/assets/js/simple/common'
-// eslint-disable-next-line
-import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
+import { setItem } from '@/assets/js/simple/localstored'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 Vue.use(Toast, {

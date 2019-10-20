@@ -1,11 +1,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull, unbindScroll } from '@/assets/js/simple/common'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
-// eslint-disable-next-line
-import { getItem, setItem, removeItem } from '@/assets/js/simple/localstored'
+import { getItem, setItem } from '@/assets/js/simple/localstored'
 import Header from '@/components/Header'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
@@ -141,8 +139,8 @@ export default {
     },
     //
     bindScroll: function () {
-      $(function () {
-        $(window).scroll(() => {
+      window.onload = () => {
+        window.onscroll = () => {
           let loading = document.getElementsByClassName('loading')[0]
           if (getScrollTop() + getClientHeight() === getScrollHeight()) {
             if (!_lock) {
@@ -154,8 +152,8 @@ export default {
               }, 50)
             }
           }
-        })
-      })
+        }
+      }
     },
     //
     onCompleted: function () {

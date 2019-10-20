@@ -40,7 +40,7 @@ export default {
     current.getArticleContent()
   },
   mounted: function () {
-    // current.onCompleted()
+    current.onCompleted()
   },
   methods: {
     getArticleContent: () => {
@@ -65,12 +65,12 @@ export default {
           current.loading = false
           current.stopParentLoading()
           if (response.data.code !== 0) {
-            window.location.href = '/common/404'
+            current.$router.push({ path: '/common/404' })
             return false
           }
           let ar = response.data.data
           if (checkNull(ar)) {
-            window.location.href = '/common/404'
+            current.$router.push({ path: '/common/404' })
             return false
           }
           current.item = ar
@@ -90,17 +90,49 @@ export default {
         img.setAttribute('preview-text', 'img')
         img.setAttribute('width', '100%')
       })
-      document.querySelectorAll('pre code').forEach((block) => {
-        // hljs.highlightBlock(block)
-      })
       // 图片是异步 所以需要重新刷新下才能使用放大
       current.$previewRefresh()
+      current.highlight()
     },
     stopParentLoading: () => {
       current.$emit('func', false)
     },
+    // 异步加载js
+    parallelLoadScripts: (array, callback) => {
+      var loader = function (src, handler) {
+        let script = document.createElement('script')
+        script.src = src
+        script.onload = script.onreadystatechange = function () {
+          script.onreadystatechange = script.onload = null
+          handler()
+        }
+        let head = document.getElementsByTagName('head')[0]
+        let doc = (head || document.body)
+        doc.appendChild(script)
+      };
+      // eslint-disable-next-line
+      (function run() {
+        if (array.length !== 0) {
+          loader(array.shift(), run)
+        } else {
+          callback && callback()
+        }
+      })()
+    },
+    highlight: () => {
+      document.querySelectorAll('pre code').forEach((block) => {
+        // eslint-disable-next-line
+        hljs.highlightBlock(block)
+      })
+    },
     //
     onCompleted: () => {
+      let scripts = [
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js'
+      ]
+      current.parallelLoadScripts(scripts, () => {
+        current.highlight()
+      })
     }
   }
 }

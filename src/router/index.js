@@ -52,6 +52,7 @@ const EditInfo = resolve => require(['@/components/user/EditInfo'], resolve)
 const NoteHome = resolve => require(['@/components/note/NoteHome'], resolve)
 const NoteLeft = resolve => require(['@/components/note/NoteLeft'], resolve)
 const NoteMine = resolve => require(['@/components/note/NoteMine'], resolve)
+const NotFound = resolve => require(['@/components/other/404'], resolve)
 
 export default new Router({
   mode: 'history',
@@ -165,6 +166,10 @@ export default new Router({
       path: '/note/left',
       name: 'NoteLeft',
       component: NoteLeft
+    }, {
+      path: '/common/404',
+      name: '404',
+      component: NotFound
     }
   ]
 })

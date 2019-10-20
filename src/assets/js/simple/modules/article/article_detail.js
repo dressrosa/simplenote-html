@@ -77,12 +77,12 @@ export default {
       })
         .then(response => {
           if (response.data.code !== 0) {
-            window.location.href = '/common/404'
+            current.$router.push({ path: '/common/404' })
             return false
           }
           let ar = response.data.data
           if (checkNull(ar)) {
-            window.location.href = '/common/404'
+            current.$router.push({ path: '/common/404' })
             return false
           }
           current.item = ar
@@ -153,7 +153,7 @@ export default {
       }
       let cobtn = document.getElementsByClassName('co_btn')[0]
       cobtn.setAttribute('disabled', 'disabled')
-      let _articleId = this.$route.params.articleId
+      let _articleId = current.$route.params.articleId
 
       Vue.axios({
         method: 'post',

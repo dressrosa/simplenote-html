@@ -16,7 +16,7 @@
       </div>
     </div>
     <div style="margin-top:45px;">
-      <input id="editContent" class="edit-box" value="ion">
+      <input id="editContent" class="edit-box" autocomplete="off" />
     </div>
   </div>
 </template>
@@ -105,5 +105,6 @@ dt {
   width: 100%;
   min-height: 50px;
   padding-left: 5px;
+  border: 0px;
 }
 </style>

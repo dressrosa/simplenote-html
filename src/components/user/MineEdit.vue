@@ -1,6 +1,6 @@
 <template>
   <div class="full_body">
-    <common_header_view/>
+    <common_header_view />
     <div class>
       <div
         class="panel panel-default"
@@ -19,7 +19,7 @@
               <path
                 d="M18.094 2H15s-1-2-2-2H7C6 0 5 2 5 2H2C0 2 0 3.967 0 3.967V14c0 2 2.036 2 2.036 2H17c3 0 3-1.983 3-1.983V4c0-2-1.906-2-1.906-2zM10 12c-1.933 0-3.5-1.567-3.5-3.5S8.067 5 10 5s3.5 1.567 3.5 3.5S11.933 12 10 12zm0 1.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm7.5-8c-.552 0-1-.448-1-1s.448-1 1-1 1 .448 1 1-.448 1-1 1z"
                 fill-rule="evenodd"
-              ></path>
+              />
             </g>
           </svg>
           <input
@@ -28,7 +28,7 @@
             name="bg"
             single
             style="position: absolute; width: 50px; left: 0px; top: 0px; right: 0px; opacity: 0;"
-          >
+          />
         </button>
 
         <div class="panel-body">
@@ -54,7 +54,7 @@
                   accept="image/jpeg, image/jpg, image/png"
                   @change="preview($event)"
                   style="opacity:0; width:100px;position: absolute;"
-                >
+                />
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@
           <div class="edit-item-left">
             <dt>签名</dt>
           </div>
-          <div class="edit-item-right">
+          <div class="edit-item-right" @click="goEdit(1)">
             <dt v-html="item.signature"></dt>
             <i class="fa fa-angle-right"></i>
           </div>
@@ -102,7 +102,7 @@
           </a>
         </div>
       </div>
-      <img id="bigImg" class="bigImg" src>
+      <img id="bigImg" class="bigImg" src />
     </div>
   </div>
 </template>

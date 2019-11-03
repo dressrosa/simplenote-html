@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import $ from 'jquery'
 import { checkNull, unbindScroll } from '@/assets/js/simple/common'
 import { getScrollTop, getClientHeight, getScrollHeight } from '@/assets/js/simple/page'
 import { getItem, setItem } from '@/assets/js/simple/localstored'
@@ -107,20 +106,22 @@ export default {
     },
     //
     bindScroll: function () {
-      $(function () {
-        $(window).scroll(function () {
-          if (getScrollTop() + getClientHeight() === getScrollHeight()) {
+      window.onload = () => {
+        window.onscroll = () => {
+          let loading = document.getElementsByClassName('loading')[0]
+          console.log((getScrollTop() + getClientHeight()) + '=' + getScrollHeight())
+          if (getScrollTop() + getClientHeight() >= getScrollHeight()) {
             if (!_lock) {
               _lock = true
-              $('.loading').css('visibility', 'visible')
-              setTimeout(function () {
+              loading.style.visibility = 'visible'
+              setTimeout(() => {
                 current.getCollects(++_pageNum, _pageSize)
-                $('.loading').css('visibility', 'hidden')
+                loading.style.visibility = 'hidden'
               }, 50)
             }
           }
-        })
-      })
+        }
+      }
     },
     //
     onCompleted: function () {

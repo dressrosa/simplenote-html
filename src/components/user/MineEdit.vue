@@ -6,55 +6,15 @@
         class="panel panel-default"
         :style="'background: url('+headForImg+item.background+') repeat 0% 0%/cover;'"
       >
-        <button class="camera" type="button" style="cursor: pointer">
-          <svg
-            viewBox="0 0 20 16"
-            class="Icon Icon--camera Icon--left"
-            width="14"
-            height="16"
-            aria-hidden="true"
-            style="height: 16px; width: 34px;"
-          >
-            <g>
-              <path
-                d="M18.094 2H15s-1-2-2-2H7C6 0 5 2 5 2H2C0 2 0 3.967 0 3.967V14c0 2 2.036 2 2.036 2H17c3 0 3-1.983 3-1.983V4c0-2-1.906-2-1.906-2zM10 12c-1.933 0-3.5-1.567-3.5-3.5S8.067 5 10 5s3.5 1.567 3.5 3.5S11.933 12 10 12zm0 1.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm7.5-8c-.552 0-1-.448-1-1s.448-1 1-1 1 .448 1 1-.448 1-1 1z"
-                fill-rule="evenodd"
-              />
-            </g>
-          </svg>
-          <input
-            id="bgupload"
-            type="file"
-            name="bg"
-            single
-            style="position: absolute; width: 50px; left: 0px; top: 0px; right: 0px; opacity: 0;"
-          />
-        </button>
-
         <div class="panel-body">
           <div class="avatar_wrapper">
-            <!-- <img alt class="avatar" :src="headForImg+item.avatar"> -->
             <div class="mask">
-              <!-- <i
-                class="icon_camera"
-                style="color: #e2e2e2; font-size: 1.5em; position: absolute; text-align: center; top: 40px; left: 40px;"
-              ></i>-->
               <div
                 class="photo_item"
                 id="item1"
                 :style="'background-image:url('+headForImg+item.avatar+')'"
+                @click="goEditAvatar()"
               >
-                <i class="fa fa-camera"></i>
-                <input
-                  id="file1"
-                  class="file1"
-                  parent_id="item1"
-                  type="file"
-                  single
-                  accept="image/jpeg, image/jpg, image/png"
-                  @change="preview($event)"
-                  style="opacity:0; width:100px;position: absolute;"
-                />
               </div>
             </div>
           </div>

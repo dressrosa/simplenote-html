@@ -48,6 +48,7 @@ const ArticleMine = resolve => require(['@/components/article/ArticleMine'], res
 
 const MineEdit = resolve => require(['@/components/user/MineEdit'], resolve)
 const EditInfo = resolve => require(['@/components/user/EditInfo'], resolve)
+const EditAvatar = resolve => require(['@/components/user/EditAvatar'], resolve)
 
 const NoteHome = resolve => require(['@/components/note/NoteHome'], resolve)
 const NoteLeft = resolve => require(['@/components/note/NoteLeft'], resolve)
@@ -130,6 +131,10 @@ export default new Router({
       path: '/mine/modify/:module',
       name: 'EditInfo',
       component: EditInfo
+    }, {
+      path: '/mine/avatar/edit',
+      name: 'EditAvatar',
+      component: EditAvatar
     }, {
       path: '/mine/edit',
       name: 'MineEdit',

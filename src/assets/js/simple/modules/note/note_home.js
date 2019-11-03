@@ -8,6 +8,9 @@ import Footer from '@/components/Footer'
 import PullToRefresh from 'pulltorefreshjs'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
+import preview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
+Vue.use(preview)
 Vue.use(Toast, {
   type: 'bottom',
   duration: 1000,
@@ -105,6 +108,9 @@ export default {
             v.rgb = 'color: rgb(' + n + ', 150, 35)'
             current.items.push(v)
           })
+          current.$nextTick(() => {
+            current.preHandle(_ret)
+          })
         })
         .catch(error => {
           _lock = false
@@ -189,6 +195,18 @@ export default {
       current.items = []
       _pageNum = 1
       current.getNotes(1, _pageSize)
+    },
+    preHandle: ars => {
+      ars.forEach(v => {
+        document.getElementsByName(v.noteId)
+          .forEach(img => {
+            img.setAttribute('preview', v.noteId)
+            img.setAttribute('preview-text', 'img')
+            img.setAttribute('width', '100%')
+          })
+      })
+      // 图片是异步 所以需要重新刷新下才能使用放大
+      current.$previewRefresh()
     },
     //
     onCompleted: function () {

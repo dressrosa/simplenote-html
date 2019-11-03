@@ -44,6 +44,9 @@ export default {
     current.onCompleted()
   },
   methods: {
+    goEditAvatar: () => {
+      current.$router.push({ path: '/mine/avatar/edit' })
+    },
     goEdit: function (_p) {
       this.$router.push({ path: '/mine/modify/' + _p })
     },

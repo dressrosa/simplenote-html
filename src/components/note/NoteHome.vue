@@ -15,7 +15,7 @@
               img-type="avatar"
               :src="headForImg+ar.user.avatar"
               id="ar.user.userId"
-            >
+            />
           </div>
           <div class="item_desc">
             <dt class="note_item_username" v-html="ar.user.nickname"></dt>
@@ -32,10 +32,10 @@
                 class="note_photo_wrapper"
                 v-for="(ph,index) in ar.files"
                 :key="ph.id"
-                :name="index"
+                :sort="index"
                 track-by="$index"
               >
-                <img class="note_photo" img-type="avatar" :src="headForImg+ph.url">
+                <img class="note_photo" :name="ph.bizId" img-type="avatar" :src="headForImg+ph.url" />
               </div>
             </div>
           </div>
@@ -87,9 +87,9 @@
         style="top: 3px; position: relative;"
         width="15px"
         src="../../assets/img/loading.gif"
-      >
+      />
     </div>
-    <common_footer_view/>
+    <common_footer_view />
   </div>
 </template>
 <script src="@/assets/js/simple/modules/note/note_home.js"></script>
